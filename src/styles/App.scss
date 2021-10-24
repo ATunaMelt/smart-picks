@@ -1,29 +1,25 @@
 @import './colors.scss';
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.background {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  background: url('./blank-bracket.png') no-repeat center center fixed; 
+  opacity: 0.4;
+  z-index:-1;
+}
+
+.App {
+  padding: 10px 50px;
+  padding-top: 100px;
+  display: flex;
+  min-height: 80vh;
 }
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
   }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
 }
 
 @keyframes App-logo-spin {
@@ -36,9 +32,8 @@
 }
 
 .primary-background {
-  background-color: $primary-color !important;
+  background-color: $primary-color;
 }
-
 
 .primary-hover:hover, .selected{
   border-bottom: 2px solid $primary-highlight-color !important;
