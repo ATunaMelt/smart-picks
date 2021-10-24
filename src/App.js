@@ -1,5 +1,5 @@
 import './styles/App.scss';
-import Header from './components/header.js'; 
+import Header from './components/header.js';
 import {
   BrowserRouter as Router,
   Switch,

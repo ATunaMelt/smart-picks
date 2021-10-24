@@ -1,8 +1,4 @@
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import MenuItem from '@mui/material/MenuItem';
-import Typography from '@mui/material/Typography';
+import { AppBar, Box, Toolbar, MenuItem, Typography } from '@mui/material';
 import { StylesProvider } from '@material-ui/core/styles';
 import '../styles/App.scss';
 import { NavLink } from 'react-router-dom';
@@ -10,7 +6,7 @@ import { NavLink } from 'react-router-dom';
 export default function Header() {
   const createMenuItem = (url, text) => {
     return (
-      <MenuItem 
+      <MenuItem
         activeClassName='selected'
         className='primary-hover'
         component={NavLink}
