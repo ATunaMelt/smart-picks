@@ -1,0 +1,40 @@
+@import './colors.scss';
+
+.background {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  background: url('./blank-bracket.png') no-repeat center center fixed; 
+  opacity: 0.4;
+  z-index:-1;
+}
+
+.App {
+  padding: 10px 50px;
+  padding-top: 100px;
+  display: flex;
+  min-height: 80vh;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.primary-background {
+  background-color: $primary-color;
+}
+
+.primary-hover:hover, .selected{
+  border-bottom: 2px solid $primary-highlight-color !important;
+}
