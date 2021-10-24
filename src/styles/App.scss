@@ -1,6 +1,4 @@
-.App {
-  text-align: center;
-}
+@import './colors.scss';
 
 .App-logo {
   height: 40vmin;
@@ -35,4 +33,13 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.primary-background {
+  background-color: $primary-color !important;
+}
+
+
+.primary-hover:hover, .selected{
+  border-bottom: 2px solid $primary-highlight-color !important;
 }
