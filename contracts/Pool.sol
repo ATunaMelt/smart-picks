@@ -25,7 +25,7 @@ import "./StringUtils.sol";
 
 /**
  * @title Pool
- * @dev Store & retrieve value in a variable
+ * @dev Store & retrieveRules value in a variable
  */
 contract Pool {
     uint256 entryFee;
@@ -49,7 +49,11 @@ contract Pool {
     mapping(uint256 => address) private entrants;
     mapping(uint256 => address) private playersTotalPoints;
 
-    constructor() {}
+    constructor(uint256 _entryFee, uint256 _maximumPlayers) public payable {
+        require(_entryFee == msg.value);
+        entryFee = _entryFee;
+        maximumPlayers = _maximumPlayers;
+    }
 
     /**
      * @dev Store value in variable
@@ -121,8 +125,8 @@ contract Pool {
      * @dev Return value
      * @return value of 'numberOfPlayers'
      */
-    function retrieve() public view returns (uint256) {
-        return numberOfPlayers;
+    function retrieveRules() public view returns (uint256, uint256) {
+        return (maximumPlayers, entryFee);
     }
 
     function get(address _addr) public view returns (BracketEntry memory) {
