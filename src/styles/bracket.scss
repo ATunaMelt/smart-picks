@@ -1,136 +1,81 @@
+@import './colors.scss';
 
 .tournament {
     display: flex;
     flex-direction: row;
     background: white;
-}
-.tournament .round {
-  font-size: .75em;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  width: 120px;
-  list-style: none;
-  padding: 0 15px;
-}
-.tournament .round .spacer {
-  flex-grow: 2;
-}
-.tournament .round .spacer:first-child,
-.tournament .round .spacer:last-child {
-  flex-grow: 1;
-}
+    padding: 25px;
+    overflow: scroll;
 
-.first-four {
-  border: 1px solid #888;
-  border-radius: 1em;
-  background-color: lightcyan;
-  padding: 0 1em;
-}
-.tournament-header {
-  text-align: center;
-  font-weight: bold;
-  border-radius: 1em;
-  border: 1px solid black;
-  background-color: #f54e00;
-  color: white;
-}
+    .round {
+      display: flex;
+      flex-direction: column;
+      list-style: none;
+      padding: 0 7px;
 
-.first-four-winner li.game-left,
-.round-1 li.game-left,
-.round-2 li.game-left,
-.round-3 li.game-left,
-.round-4 li.game-left,
-.semi-final li.game-left {
-    padding-left: 0.5em;
-}
+      li Button {
+        width: 85px;
+        min-height: 28px;
+        font-size: 0.55rem;
+        padding: 5px;
+      }
 
-.first-four-winner li.game-right,
-.round-1 li.game-right,
-.round-2 li.game-right,
-.round-3 li.game-right,
-.round-4 li.game-right,
-.semi-final li.game-right {
-    padding-right: 0.5em;
-}
+      .spacer {
+        flex-grow: 2;
 
-.region {
-    font-size: 1.5em;
-    font-weight:bold;
-}
-.region-right {
-    text-align:right;
-  padding-right: 5px;
-}
-.region-left {
-    text-align:left;
-  padding-left: 5px;
-}
+        &:first-child, &:last-child {
+          flex-grow: 1;
+        }
+      }
+    }
 
-ul.round-0 li.game-left span:first-child,
-ul.round-0 li.game-right span:last-child {
-    font-size: 0.5em;
-}
+  ul.round.round-5 {
+    li.spacer {
+      width: 50%;
+      border-right: 1px solid $bracket-blue;
+      flex-grow: 0;
+      height: 100px;
 
+      &:first-child, &:last-child {
+        border: none;
+        flex-grow: 2;
+      }
+    }
 
-.round-0 > li {
-  height: 40px;
-
-  .spacer {
-    min-height: 35px;
-    padding-right:.25em;
+    li.final Button{
+      text-align: center;
+      font-size: 0.8rem;
+    }
   }
-}
 
-.round-1 > li {
-  height: 60px;
-}
-
-li {
-  height: 60px;
-
-  .spacer {
-    min-height: 60px;
-    padding-right:.25em;
+  .left.spacer.odd {
+    border-right: 1px solid $bracket-blue;
   }
-}
 
+  .right.spacer.odd {
+    border-left: 1px solid $bracket-blue;
+  }
 
+  .round-1, .round-2, .round-3, .round-4, .round-5 {
+    .left .dash {
+      width: 15px;
+      height: 1px;
+      display: inline-block;
+      vertical-align: middle;
+      margin-left: -15px;
+      background-color: $bracket-blue;
+    }
+  }
 
-li.game-right {
-  text-align: right;
-  border-left: 1px solid #aaa;
-}
+  .round-1, .round-2, .round-3, .round-4, .round-5 {
+    .right .dash {
+      width: 15px;
+      height: 1px;
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: -15px;
+      background-color: $bracket-blue;
+    }
+  }
 
-li {
-  height: 30px;
-  vertical-align: middle;
-}
-
-
-.final {
-    text-align: center;
-    padding-top: 1em;
-    padding-bottom: 1em;
-    border: 1px solid #aaa;
-    margin-top: 1em;
-    margin-bottom: 1em;
-    font-weight:bold;
-}
-.finals .centered {
-    text-align:center;
-    font-weight:bold;
-}
-.finals .centered > input {
-    display:block;
-    width:4em;
-    margin: 0 auto 0 auto;
-    text-align:center;
-}
-
-.body-first-child {
-  margin-top: -45px;
-}
-.extra-padding {
-  padding-top: 45px;
 }
