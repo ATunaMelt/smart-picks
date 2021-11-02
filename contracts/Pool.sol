@@ -28,11 +28,11 @@ import "./StringUtils.sol";
  * @dev Store & retrieve value in a variable
  */
 contract Pool {
-    uint256 entryFee;
-    uint256 maximumPlayers;
+    uint256 public entryFee;
+    uint256 public maximumPlayers;
     uint256 points;
     // Uints are initialized to 0 automatically
-    uint256 numberOfPlayers;
+    uint256 public numberOfPlayers;
     bool addressHasEntered;
 
     struct BracketEntry {
@@ -57,7 +57,7 @@ contract Pool {
      */
 
     function setMaximumPlayers(uint256 _num) public {
-        numberOfPlayers = _num;
+        maximumPlayers = _num;
     }
 
     function enterPool(
