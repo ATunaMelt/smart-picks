@@ -41,12 +41,12 @@ contract Pool {
         string[] roundTwoWinners;
         string[] roundThreeWinners;
         string[] roundFourWinners;
-        string[] _roundFiveWinners;
+        string[] roundFiveWinners;
         string overallWinner;
     }
 
-    mapping(address => BracketEntry) public brackets;
-    mapping(uint256 => address) private entrants;
+    mapping(address => BracketEntry) public playersBracketMapping;
+    mapping(uint256 => address) private playersAddressMapping;
     mapping(uint256 => address) private playersTotalPoints;
 
     constructor(uint256 _entryFee, uint256 _maximumPlayers) public {
@@ -73,7 +73,7 @@ contract Pool {
         string memory _overallWinner
     ) public payable {
         require(msg.value == entryFee);
-        brackets[msg.sender] = BracketEntry(
+        playersBracketMapping[msg.sender] = BracketEntry(
             _teamName,
             _roundOneWinners,
             _roundTwoWinners,
@@ -83,7 +83,7 @@ contract Pool {
             _overallWinner
         );
         numberOfPlayers++;
-        entrants[numberOfPlayers] = msg.sender;
+        playersAddressMapping[numberOfPlayers] = msg.sender;
     }
 
     event LogNum(uint256);
@@ -97,27 +97,98 @@ contract Pool {
         string[] memory _roundFiveWinners,
         string memory _overallWinner
     ) public returns (address) {
-        // logic to compare to all brackets
+        // logic to compare to all playersBracketMapping
         address _winnerAddr;
         uint256 winnerScore = 0;
 
         for (uint256 i = 1; i <= numberOfPlayers; i++) {
             uint256 currentScore = 0;
-            string memory winner = brackets[entrants[i]].overallWinner;
-            if (StringUtils.equal(winner, _overallWinner)) {
+
+            // ~~~ Round One ~~~~
+            string[] memory playersRoundOne = playersBracketMapping[
+                playersAddressMapping[i]
+            ].roundOneWinners;
+            currentScore = totalRound(
+                playersRoundOne,
+                _roundOneWinners,
+                1,
+                currentScore
+            );
+            // ~~~ Round Two ~~~~
+            string[] memory playersRoundTwo = playersBracketMapping[
+                playersAddressMapping[i]
+            ].roundTwoWinners;
+            // plus equal or =
+            currentScore += totalRound(
+                playersRoundTwo,
+                _roundTwoWinners,
+                1,
+                currentScore
+            );
+
+            string[] memory playersRoundThree = playersBracketMapping[
+                playersAddressMapping[i]
+            ].roundThreeWinners;
+            currentScore = totalRound(
+                playersRoundThree,
+                _roundThreeWinners,
+                1,
+                currentScore
+            );
+
+            string[] memory playersRoundFour = playersBracketMapping[
+                playersAddressMapping[i]
+            ].roundFourWinners;
+            currentScore = totalRound(
+                playersRoundFour,
+                _roundFourWinners,
+                1,
+                currentScore
+            );
+
+            string[] memory playersRoundFive = playersBracketMapping[
+                playersAddressMapping[i]
+            ].roundFiveWinners;
+
+            currentScore = totalRound(
+                playersRoundFive,
+                _roundFiveWinners,
+                1,
+                currentScore
+            );
+
+            string memory playersChosenWinner = playersBracketMapping[
+                playersAddressMapping[i]
+            ].overallWinner;
+
+            if (StringUtils.equal(playersChosenWinner, _overallWinner)) {
                 currentScore += 10;
             }
 
             if (currentScore > winnerScore) {
                 winnerScore = currentScore;
-                _winnerAddr = entrants[i];
+                _winnerAddr = playersAddressMapping[i];
             }
         }
 
         emit LogNum(numberOfPlayers);
-        emit LogAdd(entrants[0]);
+        emit LogAdd(playersAddressMapping[0]);
 
         return _winnerAddr;
+    }
+
+    function totalRound(
+        string[] memory _playersRound,
+        string[] memory _roundWinners,
+        uint256 pointsPerGame,
+        uint256 currentScore
+    ) internal returns (uint256) {
+        for (uint256 i = 0; i <= _roundWinners.length; i++) {
+            if (StringUtils.equal(_playersRound[i], _roundWinners[i])) {
+                currentScore += pointsPerGame;
+            }
+        }
+        return currentScore;
     }
 
     /**
@@ -129,6 +200,6 @@ contract Pool {
     }
 
     function get(address _addr) public view returns (BracketEntry memory) {
-        return brackets[_addr];
+        return playersBracketMapping[_addr];
     }
 }
