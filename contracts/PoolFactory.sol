@@ -5,8 +5,8 @@ import "./Pool.sol";
 contract PoolFactory {
     Pool[] public poolArray;
 
-    function createNewPool() public {
-        Pool pool = new Pool();
+    function createNewPool(uint256 _entryFee, uint256 _maximumPlayers) public {
+        Pool pool = new Pool(_entryFee, _maximumPlayers);
         poolArray.push(pool);
     }
 }
