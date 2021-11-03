@@ -49,8 +49,7 @@ contract Pool {
     mapping(uint256 => address) private entrants;
     mapping(uint256 => address) private playersTotalPoints;
 
-    constructor(uint256 _entryFee, uint256 _maximumPlayers) public payable {
-        require(_entryFee == msg.value);
+    constructor(uint256 _entryFee, uint256 _maximumPlayers) public {
         entryFee = _entryFee;
         maximumPlayers = _maximumPlayers;
     }
@@ -65,7 +64,6 @@ contract Pool {
     }
 
     function enterPool(
-        address _addr,
         string memory _teamName,
         string[] memory _roundOneWinners,
         string[] memory _roundTwoWinners,
@@ -74,7 +72,8 @@ contract Pool {
         string[] memory _roundFiveWinners,
         string memory _overallWinner
     ) public payable {
-        brackets[_addr] = BracketEntry(
+        require(msg.value == entryFee);
+        brackets[msg.sender] = BracketEntry(
             _teamName,
             _roundOneWinners,
             _roundTwoWinners,
@@ -84,7 +83,7 @@ contract Pool {
             _overallWinner
         );
         numberOfPlayers++;
-        entrants[numberOfPlayers] = _addr;
+        entrants[numberOfPlayers] = msg.sender;
     }
 
     event LogNum(uint256);
