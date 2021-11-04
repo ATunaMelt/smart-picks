@@ -41,6 +41,7 @@ contract Pool {
         string[] roundFourWinners;
         string[] roundFiveWinners;
         string overallWinner;
+        address sender;
     }
 
     mapping(address => BracketEntry) public playersBracketMapping;
@@ -61,6 +62,10 @@ contract Pool {
         maximumPlayers = _num;
     }
 
+    function getNumberEntries() public view returns (uint256) {
+        return numberOfPlayers;
+    }
+
     function enterPool(
         string memory _teamName,
         string[] memory _roundOneWinners,
@@ -70,12 +75,33 @@ contract Pool {
         string[] memory _roundFiveWinners,
         string memory _overallWinner
     ) public payable {
-        require(msg.value == entryFee);
-        require(_roundOneWinners.length == 32);
-        require(_roundTwoWinners.length == 16);
-        require(_roundThreeWinners.length == 8);
-        require(_roundFourWinners.length == 4);
-        require(_roundFiveWinners.length == 2);
+        require(msg.value == entryFee, "Entry fee not sufficient");
+        require(
+            _roundOneWinners.length == 32,
+            "roundOneWinners length incorrect"
+        );
+        require(
+            _roundTwoWinners.length == 16,
+            "roundTwoWinners length incorrect"
+        );
+        require(
+            _roundThreeWinners.length == 8,
+            "roundThreeWinners length incorrect"
+        );
+        require(
+            _roundFourWinners.length == 4,
+            "roundFourWinners length incorrect"
+        );
+        require(
+            _roundFiveWinners.length == 2,
+            "roundFiveWinners length incorrect"
+        );
+
+        require(
+            abi.encode(playersBracketMapping[msg.sender]).length > 0,
+            "Sender has already entered bracket"
+        );
+
         playersBracketMapping[msg.sender] = BracketEntry(
             _teamName,
             _roundOneWinners,
@@ -83,7 +109,8 @@ contract Pool {
             _roundThreeWinners,
             _roundFourWinners,
             _roundFiveWinners,
-            _overallWinner
+            _overallWinner,
+            msg.sender
         );
         numberOfPlayers++;
         playersAddressMapping[numberOfPlayers] = msg.sender;
@@ -99,7 +126,7 @@ contract Pool {
         string[] memory _roundFourWinners,
         string[] memory _roundFiveWinners,
         string memory _overallWinner
-    ) public returns (address) {
+    ) public payable returns (address) {
         // logic to compare to all playersBracketMapping
         address _winnerAddr;
         uint256 winnerScore = 0;
@@ -165,8 +192,9 @@ contract Pool {
 
         emit LogNum(numberOfPlayers);
         emit LogAdd(playersAddressMapping[0]);
-
-        return _winnerAddr;
+        bool sent = payable(_winnerAddr).send(entryFee);
+        require(sent, "Failed to send Ether");
+        return playersAddressMapping[0];
     }
 
     function totalRound(
