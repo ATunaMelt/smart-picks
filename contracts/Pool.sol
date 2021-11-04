@@ -73,6 +73,11 @@ contract Pool {
         string memory _overallWinner
     ) public payable {
         require(msg.value == entryFee);
+        require(_roundOneWinners.length == 32);
+        require(_roundTwoWinners.length == 16);
+        require(_roundThreeWinners.length == 8);
+        require(_roundFourWinners.length == 4);
+        require(_roundFiveWinners.length == 2);
         playersBracketMapping[msg.sender] = BracketEntry(
             _teamName,
             _roundOneWinners,
@@ -100,68 +105,56 @@ contract Pool {
         // logic to compare to all playersBracketMapping
         address _winnerAddr;
         uint256 winnerScore = 0;
+        require(_roundOneWinners.length == 32);
+        require(_roundTwoWinners.length == 16);
+        require(_roundThreeWinners.length == 8);
+        require(_roundFourWinners.length == 4);
+        require(_roundFiveWinners.length == 2);
 
         for (uint256 i = 1; i <= numberOfPlayers; i++) {
             uint256 currentScore = 0;
-
-            // ~~~ Round One ~~~~
-            string[] memory playersRoundOne = playersBracketMapping[
+            BracketEntry memory playersBracketStruct = playersBracketMapping[
                 playersAddressMapping[i]
-            ].roundOneWinners;
+            ];
+            // ~~~ Round One ~~~~
             currentScore = totalRound(
-                playersRoundOne,
+                playersBracketStruct.roundOneWinners,
                 _roundOneWinners,
                 1,
                 currentScore
             );
             // ~~~ Round Two ~~~~
-            string[] memory playersRoundTwo = playersBracketMapping[
-                playersAddressMapping[i]
-            ].roundTwoWinners;
-            // plus equal or =
-            currentScore += totalRound(
-                playersRoundTwo,
-                _roundTwoWinners,
-                1,
-                currentScore
-            );
+            // currentScore = totalRound(
+            //     playersBracketStruct.roundTwoWinners,
+            //     _roundTwoWinners,
+            //     1,
+            //     currentScore
+            // );
+            // currentScore = totalRound(
+            //     playersBracketStruct.roundThreeWinners,
+            //     _roundThreeWinners,
+            //     1,
+            //     currentScore
+            // );
+            // currentScore = totalRound(
+            //     playersBracketStruct.roundFourWinners,
+            //     _roundFourWinners,
+            //     1,
+            //     currentScore
+            // );
+            // currentScore = totalRound(
+            //     playersBracketStruct.roundFiveWinners,
+            //     _roundFiveWinners,
+            //     1,
+            //     currentScore
+            // );
 
-            string[] memory playersRoundThree = playersBracketMapping[
-                playersAddressMapping[i]
-            ].roundThreeWinners;
-            currentScore = totalRound(
-                playersRoundThree,
-                _roundThreeWinners,
-                1,
-                currentScore
-            );
-
-            string[] memory playersRoundFour = playersBracketMapping[
-                playersAddressMapping[i]
-            ].roundFourWinners;
-            currentScore = totalRound(
-                playersRoundFour,
-                _roundFourWinners,
-                1,
-                currentScore
-            );
-
-            string[] memory playersRoundFive = playersBracketMapping[
-                playersAddressMapping[i]
-            ].roundFiveWinners;
-
-            currentScore = totalRound(
-                playersRoundFive,
-                _roundFiveWinners,
-                1,
-                currentScore
-            );
-
-            string memory playersChosenWinner = playersBracketMapping[
-                playersAddressMapping[i]
-            ].overallWinner;
-
-            if (StringUtils.equal(playersChosenWinner, _overallWinner)) {
+            if (
+                StringUtils.equal(
+                    playersBracketStruct.overallWinner,
+                    _overallWinner
+                )
+            ) {
                 currentScore += 10;
             }
 
@@ -183,11 +176,13 @@ contract Pool {
         uint256 pointsPerGame,
         uint256 currentScore
     ) internal returns (uint256) {
-        for (uint256 i = 0; i <= _roundWinners.length; i++) {
-            if (StringUtils.equal(_playersRound[i], _roundWinners[i])) {
-                currentScore += pointsPerGame;
-            }
-        }
+        emit LogNum(_roundWinners.length);
+
+        // for (uint256 i = 0; i < _roundWinners.length; i++) {
+        //     if (StringUtils.equal(_playersRound[i], _roundWinners[i])) {
+        //         currentScore += pointsPerGame;
+        //     }
+        // }
         return currentScore;
     }
 
