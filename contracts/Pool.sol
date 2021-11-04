@@ -21,8 +21,6 @@ Pool contract lifecycle
       the totalPoints() function on each user and then return the winning user, along with the payout transaction.
  */
 
-import "./StringUtils.sol";
-
 /**
  * @title Pool
  * @dev Store & retrieveRules value in a variable
@@ -46,10 +44,10 @@ contract Pool {
     }
 
     mapping(address => BracketEntry) public playersBracketMapping;
-    mapping(uint256 => address) private playersAddressMapping;
+    mapping(uint256 => address) public playersAddressMapping;
     mapping(uint256 => address) private playersTotalPoints;
 
-    constructor(uint256 _entryFee, uint256 _maximumPlayers) public {
+    constructor(uint256 _entryFee, uint256 _maximumPlayers) {
         entryFee = _entryFee;
         maximumPlayers = _maximumPlayers;
     }
@@ -112,54 +110,55 @@ contract Pool {
         require(_roundFiveWinners.length == 2);
 
         for (uint256 i = 1; i <= numberOfPlayers; i++) {
-            uint256 currentScore = 0;
+            uint256 currentScoreForPlayer = 0;
+
             BracketEntry memory playersBracketStruct = playersBracketMapping[
                 playersAddressMapping[i]
             ];
             // ~~~ Round One ~~~~
-            currentScore = totalRound(
+            currentScoreForPlayer = totalRound(
                 playersBracketStruct.roundOneWinners,
                 _roundOneWinners,
                 1,
-                currentScore
+                currentScoreForPlayer
             );
             // ~~~ Round Two ~~~~
-            // currentScore = totalRound(
-            //     playersBracketStruct.roundTwoWinners,
-            //     _roundTwoWinners,
-            //     1,
-            //     currentScore
-            // );
-            // currentScore = totalRound(
-            //     playersBracketStruct.roundThreeWinners,
-            //     _roundThreeWinners,
-            //     1,
-            //     currentScore
-            // );
-            // currentScore = totalRound(
-            //     playersBracketStruct.roundFourWinners,
-            //     _roundFourWinners,
-            //     1,
-            //     currentScore
-            // );
-            // currentScore = totalRound(
-            //     playersBracketStruct.roundFiveWinners,
-            //     _roundFiveWinners,
-            //     1,
-            //     currentScore
-            // );
+            currentScoreForPlayer = totalRound(
+                playersBracketStruct.roundTwoWinners,
+                _roundTwoWinners,
+                1,
+                currentScoreForPlayer
+            );
+            currentScoreForPlayer = totalRound(
+                playersBracketStruct.roundThreeWinners,
+                _roundThreeWinners,
+                1,
+                currentScoreForPlayer
+            );
+            currentScoreForPlayer = totalRound(
+                playersBracketStruct.roundFourWinners,
+                _roundFourWinners,
+                1,
+                currentScoreForPlayer
+            );
+            currentScoreForPlayer = totalRound(
+                playersBracketStruct.roundFiveWinners,
+                _roundFiveWinners,
+                1,
+                currentScoreForPlayer
+            );
 
             if (
-                StringUtils.equal(
+                compareStrings(
                     playersBracketStruct.overallWinner,
                     _overallWinner
                 )
             ) {
-                currentScore += 10;
+                currentScoreForPlayer += 10;
             }
 
-            if (currentScore > winnerScore) {
-                winnerScore = currentScore;
+            if (currentScoreForPlayer > winnerScore) {
+                winnerScore = currentScoreForPlayer;
                 _winnerAddr = playersAddressMapping[i];
             }
         }
@@ -174,16 +173,16 @@ contract Pool {
         string[] memory _playersRound,
         string[] memory _roundWinners,
         uint256 pointsPerGame,
-        uint256 currentScore
+        uint256 currentScoreForPlayer
     ) internal returns (uint256) {
         emit LogNum(_roundWinners.length);
 
-        // for (uint256 i = 0; i < _roundWinners.length; i++) {
-        //     if (StringUtils.equal(_playersRound[i], _roundWinners[i])) {
-        //         currentScore += pointsPerGame;
-        //     }
-        // }
-        return currentScore;
+        for (uint256 i = 0; i < _roundWinners.length; i++) {
+            if (compareStrings(_playersRound[i], _roundWinners[i])) {
+                currentScoreForPlayer += pointsPerGame;
+            }
+        }
+        return currentScoreForPlayer;
     }
 
     /**
@@ -196,5 +195,14 @@ contract Pool {
 
     function get(address _addr) public view returns (BracketEntry memory) {
         return playersBracketMapping[_addr];
+    }
+
+    function compareStrings(string memory a, string memory b)
+        public
+        pure
+        returns (bool)
+    {
+        return (keccak256(abi.encodePacked((a))) ==
+            keccak256(abi.encodePacked((b))));
     }
 }
