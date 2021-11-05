@@ -29,6 +29,7 @@ contract Pool {
     uint256 public entryFee;
     uint256 public maximumPlayers;
     uint256 points;
+    uint256 public etherInPot;
     // Uints are initialized to 0 automatically
     uint256 public numberOfPlayers;
     bool addressHasEntered;
@@ -51,6 +52,7 @@ contract Pool {
     constructor(uint256 _entryFee, uint256 _maximumPlayers) {
         entryFee = _entryFee;
         maximumPlayers = _maximumPlayers;
+        etherInPot = 0;
     }
 
     /**
@@ -74,7 +76,8 @@ contract Pool {
         string[] memory _roundFourWinners,
         string[] memory _roundFiveWinners,
         string memory _overallWinner
-    ) public payable {
+    ) public payable returns (bool) {
+        bool enterSucessful = false;
         require(msg.value == entryFee, "Entry fee not sufficient");
         require(
             _roundOneWinners.length == 32,
@@ -114,6 +117,9 @@ contract Pool {
         );
         numberOfPlayers++;
         playersAddressMapping[numberOfPlayers] = msg.sender;
+        etherInPot = etherInPot + msg.value;
+        enterSucessful = true;
+        return enterSucessful;
     }
 
     event LogNum(uint256);
@@ -232,5 +238,10 @@ contract Pool {
     {
         return (keccak256(abi.encodePacked((a))) ==
             keccak256(abi.encodePacked((b))));
+    }
+
+    function payWinner(address winnerAddress) internal returns (bool) {
+        bool sent = payable(winnerAddress).send(etherInPot);
+        return sent;
     }
 }
