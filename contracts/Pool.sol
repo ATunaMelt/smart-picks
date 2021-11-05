@@ -30,6 +30,7 @@ contract Pool {
     uint256 public maximumPlayers;
     uint256 points;
     uint256 public etherInPot;
+    address winner;
     // Uints are initialized to 0 automatically
     uint256 public numberOfPlayers;
     bool addressHasEntered;
@@ -68,6 +69,10 @@ contract Pool {
         return numberOfPlayers;
     }
 
+    function getWinnerAddress() public view returns (address) {
+        return winner;
+    }
+
     function enterPool(
         string memory _teamName,
         string[] memory _roundOneWinners,
@@ -76,9 +81,8 @@ contract Pool {
         string[] memory _roundFourWinners,
         string[] memory _roundFiveWinners,
         string memory _overallWinner
-    ) public payable returns (bool) {
-        bool enterSucessful = false;
-        require(msg.value == entryFee, "Entry fee not sufficient");
+    ) public payable returns (address) {
+        require(msg.value >= entryFee, "Entry fee not sufficient");
         require(
             _roundOneWinners.length == 32,
             "roundOneWinners length incorrect"
@@ -115,15 +119,13 @@ contract Pool {
             _overallWinner,
             msg.sender
         );
-        numberOfPlayers++;
+
         playersAddressMapping[numberOfPlayers] = msg.sender;
         etherInPot = etherInPot + msg.value;
-        enterSucessful = true;
-        return enterSucessful;
+        numberOfPlayers++;
+        address sender = msg.sender;
+        return sender;
     }
-
-    event LogNum(uint256);
-    event LogAdd(address);
 
     function closePool(
         string[] memory _roundOneWinners,
@@ -132,7 +134,7 @@ contract Pool {
         string[] memory _roundFourWinners,
         string[] memory _roundFiveWinners,
         string memory _overallWinner
-    ) public payable returns (address) {
+    ) public payable {
         // logic to compare to all playersBracketMapping
         address _winnerAddr;
         uint256 winnerScore = 0;
@@ -142,7 +144,9 @@ contract Pool {
         require(_roundFourWinners.length == 4);
         require(_roundFiveWinners.length == 2);
 
-        for (uint256 i = 1; i <= numberOfPlayers; i++) {
+        // todo: add in require for only keeper can call this function
+
+        for (uint256 i = 0; i <= numberOfPlayers - 1; i++) {
             uint256 currentScoreForPlayer = 0;
 
             BracketEntry memory playersBracketStruct = playersBracketMapping[
@@ -192,15 +196,13 @@ contract Pool {
 
             if (currentScoreForPlayer > winnerScore) {
                 winnerScore = currentScoreForPlayer;
-                _winnerAddr = playersAddressMapping[i];
+                _winnerAddr = playersBracketStruct.sender;
             }
         }
 
-        emit LogNum(numberOfPlayers);
-        emit LogAdd(playersAddressMapping[0]);
         bool sent = payable(_winnerAddr).send(entryFee);
         require(sent, "Failed to send Ether");
-        return playersAddressMapping[0];
+        winner = _winnerAddr;
     }
 
     function totalRound(
@@ -208,9 +210,7 @@ contract Pool {
         string[] memory _roundWinners,
         uint256 pointsPerGame,
         uint256 currentScoreForPlayer
-    ) internal returns (uint256) {
-        emit LogNum(_roundWinners.length);
-
+    ) internal pure returns (uint256) {
         for (uint256 i = 0; i < _roundWinners.length; i++) {
             if (compareStrings(_playersRound[i], _roundWinners[i])) {
                 currentScoreForPlayer += pointsPerGame;
