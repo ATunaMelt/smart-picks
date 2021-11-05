@@ -14,19 +14,15 @@ async function main() {
   // await hre.run('compile');
 
   // We get the contract to deploy
-  const Greeter = await hre.ethers.getContractFactory('Greeter');
   const Pool = await hre.ethers.getContractFactory('Pool');
   const PoolFactory = await hre.ethers.getContractFactory('PoolFactory');
 
-  const greeter = await Greeter.deploy('Hello, Hardhat!');
   const pool = await Pool.deploy(2, 2);
   const poolFactory = await PoolFactory.deploy();
 
-  await greeter.deployed();
   await pool.deployed();
   await poolFactory.deployed();
 
-  console.log('Greeter deployed to:', greeter.address);
   console.log('pool deployed to:', pool.address);
   console.log('poolFactory deployed to:', poolFactory.address);
 }
