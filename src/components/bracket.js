@@ -4,23 +4,87 @@ import '../styles/bracket.scss';
 import { useState } from 'react';
 
 const starterGames = {
-  west: ['Gonzaga', 'Norfolk', 'Oklahoma', 'Missouri', 'Creighton', 'UCSB', 'Virginia', 'Ohio',
-      'USC', 'Drake', 'Kansas', 'East. Wash.', 'Oregon', 'VCU', 'Iowa', 'G. Canyon'],
-  east: ['Michigan', 'Texas South.', 'LSU', 'Bonaventure', 'Colorado', 'Georgetown',
-      'Florida St.', 'UNC', 'BYU', 'UCLA', 'Texas', 'Abilene', 'UConn', 'Maryland', 'Alabama', 'Iona'],
-  south: ['Baylor', 'Hartford', 'N. Carolina', 'Wisconsin', 'Villanova', 'Winthrop',
-      'Purdue', 'North Texas', 'Texas Tech', 'Utah St', 'Arkansas', 'Colgate', 'Florida', 'Virginia Tech',
-      'Ohio St', 'Oral Roberts'],
-  midwest: ['Illinois', 'Drexel', 'Loyola', 'Georgia Tech', 'Tennessee', 'Oregon St',
-      'Oklahoma St.', 'Liberty', 'San Diego St.', 'Syracuse', 'West Virginia', 'Morehead St.',
-      'Clemson', 'Rutgers', 'Houston', 'Cleveland St']
+  west: [
+    'Gonzaga',
+    'Norfolk',
+    'Oklahoma',
+    'Missouri',
+    'Creighton',
+    'UCSB',
+    'Virginia',
+    'Ohio',
+    'USC',
+    'Drake',
+    'Kansas',
+    'East. Wash.',
+    'Oregon',
+    'VCU',
+    'Iowa',
+    'G. Canyon',
+  ],
+  east: [
+    'Michigan',
+    'Texas South.',
+    'LSU',
+    'Bonaventure',
+    'Colorado',
+    'Georgetown',
+    'Florida St.',
+    'UNC',
+    'BYU',
+    'UCLA',
+    'Texas',
+    'Abilene',
+    'UConn',
+    'Maryland',
+    'Alabama',
+    'Iona',
+  ],
+  south: [
+    'Baylor',
+    'Hartford',
+    'N. Carolina',
+    'Wisconsin',
+    'Villanova',
+    'Winthrop',
+    'Purdue',
+    'North Texas',
+    'Texas Tech',
+    'Utah St',
+    'Arkansas',
+    'Colgate',
+    'Florida',
+    'Virginia Tech',
+    'Ohio St',
+    'Oral Roberts',
+  ],
+  midwest: [
+    'Illinois',
+    'Drexel',
+    'Loyola',
+    'Georgia Tech',
+    'Tennessee',
+    'Oregon St',
+    'Oklahoma St.',
+    'Liberty',
+    'San Diego St.',
+    'Syracuse',
+    'West Virginia',
+    'Morehead St.',
+    'Clemson',
+    'Rutgers',
+    'Houston',
+    'Cleveland St',
+  ],
 };
 
-const getSpacer = (classes) => <li className={classes}>&nbsp;</li>
+const getSpacer = (classes) => <li className={classes}>&nbsp;</li>;
 
 function BracketItem(props) {
-  const { classes, withSpacer, teamObj, click  } = props;
-  const [ variant, setVariant ] = useState(teamObj.win ? 'contained' : 'outlined');
+  const { classes, withSpacer, teamObj, click } = props;
+  const [variant, setVariant] = useState(
+    teamObj.win ? 'contained' : 'outlined'
+  );
 
   if (variant === 'contained' && !teamObj.win) setVariant('outlined');
 
@@ -30,20 +94,26 @@ function BracketItem(props) {
     teamObj.toggleWin();
     setVariant(teamObj.win ? 'contained' : 'outlined');
     click();
-  }
+  };
 
   const item = (
     <li className={classes}>
-      {teamObj.side === 'left' && <div className='dash'/>}
-      <Button onClick={buttonClick} variant={variant}>{teamObj.team ? teamObj.team : ''}</Button>
-      {teamObj.side === 'right' && <div className='dash'/>}
+      {teamObj.side === 'left' && <div className='dash' />}
+      <Button onClick={buttonClick} variant={variant}>
+        {teamObj.team ? teamObj.team : ''}
+      </Button>
+      {teamObj.side === 'right' && <div className='dash' />}
     </li>
   );
 
-  return withSpacer ? (<>
+  return withSpacer ? (
+    <>
       {getSpacer('spacer ' + classes)}
       {item}
-    </>) : item;
+    </>
+  ) : (
+    item
+  );
 }
 
 BracketItem.propTypes = {
@@ -67,12 +137,12 @@ class Node {
   toggleWin() {
     if (this.win) {
       let curr = this.parent;
-      while(curr && curr.team && curr.team === this.team) {
+      while (curr && curr.team && curr.team === this.team) {
         curr.team = null;
         curr.win = false;
         curr = curr.parent;
       }
-    } else if(this.parent){
+    } else if (this.parent) {
       if (this.parent.lowerChild.win) this.parent.lowerChild.toggleWin();
       if (this.parent.upperChild.win) this.parent.upperChild.toggleWin();
       this.parent.team = this.team;
@@ -93,7 +163,9 @@ function buildRoundLeft(roundArr, roundNumber) {
 
   return roundArr.reduce((prev, team, i) => {
     const isEven = i % 2 === 0;
-    isEven ? currNode = new Node(null, roundNumber, 'left') : prev.push(currNode);
+    isEven
+      ? (currNode = new Node(null, roundNumber, 'left'))
+      : prev.push(currNode);
     currNode[isEven ? 'upperChild' : 'lowerChild'] = roundArr[i];
     roundArr[i].parent = currNode;
     return prev;
@@ -112,8 +184,18 @@ function buildRight(parentArr, roundNumber, isSeed, seed) {
   let counter = 0;
 
   return parentArr.reduce((prev, parent) => {
-    parent.upperChild = new Node(isSeed ? seed[counter++] : null, roundNumber, 'right', parent);
-    parent.lowerChild = new Node(isSeed ? seed[counter++] : null, roundNumber, 'right', parent);
+    parent.upperChild = new Node(
+      isSeed ? seed[counter++] : null,
+      roundNumber,
+      'right',
+      parent
+    );
+    parent.lowerChild = new Node(
+      isSeed ? seed[counter++] : null,
+      roundNumber,
+      'right',
+      parent
+    );
     return [...prev, parent.upperChild, parent.lowerChild];
   }, []);
 }
@@ -127,11 +209,19 @@ function renderTree(root, refreshBracket) {
   let holder = [root.upperChild];
   let temp = [];
 
-  while(holder.length > 0) {
+  while (holder.length > 0) {
     let team = holder[i];
-    elemArr.push(<BracketItem classes={`${isLeft ? 'left' : 'right'} ${i % 2 === 0 ? 'even' : 'odd'}`} withSpacer={true} teamObj={team} click={refreshBracket}/>);
+    elemArr.push(
+      <BracketItem
+        classes={`${isLeft ? 'left' : 'right'} ${i % 2 === 0 ? 'even' : 'odd'}`}
+        withSpacer={true}
+        teamObj={team}
+        click={refreshBracket}
+      />
+    );
 
-    if (team && team.upperChild && team.lowerChild) temp.push(team.upperChild, team.lowerChild);
+    if (team && team.upperChild && team.lowerChild)
+      temp.push(team.upperChild, team.lowerChild);
     i++;
 
     if (i === holder.length) {
@@ -144,23 +234,37 @@ function renderTree(root, refreshBracket) {
 
       if (holder.length === 0 && isLeft) {
         isLeft = false;
-        rounds[rounds.length-1].pop();
-        rounds[rounds.length-1].push(<BracketItem classes={'game-top final'} withSpacer={true} teamObj={root} click={refreshBracket}/>,
-          <BracketItem classes={'right even'} withSpacer={true} teamObj={root.lowerChild} click={refreshBracket}/>, getSpacer('spacer'));
+        rounds[rounds.length - 1].pop();
+        rounds[rounds.length - 1].push(
+          <BracketItem
+            classes={'game-top final'}
+            withSpacer={true}
+            teamObj={root}
+            click={refreshBracket}
+          />,
+          <BracketItem
+            classes={'right even'}
+            withSpacer={true}
+            teamObj={root.lowerChild}
+            click={refreshBracket}
+          />,
+          getSpacer('spacer')
+        );
         holder = [root.lowerChild.upperChild, root.lowerChild.lowerChild];
       }
-
     }
-  };
+  }
   return rounds;
 }
 
 export default function Bracket(props) {
-  let [ rounds, setRounds ] = useState([]);
+  let [rounds, setRounds] = useState([]);
   let rootNode = buildTree();
 
   function buildTree() {
-    let holder = [...starterGames.west, ...starterGames.east].map((team) => new Node(team, 1, 'left'));
+    let holder = [...starterGames.west, ...starterGames.east].map(
+      (team) => new Node(team, 1, 'left')
+    );
     for (let i = 2; i < 7; i++) {
       holder = buildRoundLeft(holder, i);
     }
@@ -174,7 +278,10 @@ export default function Bracket(props) {
     for (let j = 5; j >= 2; j--) {
       holder = buildRight(holder, j, false, []);
     }
-    buildRight(holder, 1, true, [...starterGames.south, ...starterGames.midwest]);
+    buildRight(holder, 1, true, [
+      ...starterGames.south,
+      ...starterGames.midwest,
+    ]);
 
     if (rounds.length === 0) refreshBracket(root);
     return root;
@@ -184,10 +291,12 @@ export default function Bracket(props) {
     setRounds(renderTree(root, refreshBracket));
   }
 
-  return <div className='tournament'>
-    {rounds.map((round, i) => {
-      const classes = `round round-${i <= 5 ? i : Math.abs(i-10)}`;
-      return <ul className={classes}> {round.map((item) => item)} </ul>
-    })}
-  </div>
+  return (
+    <div className='tournament'>
+      {rounds.map((round, i) => {
+        const classes = `round round-${i <= 5 ? i : Math.abs(i - 10)}`;
+        return <ul className={classes}> {round.map((item) => item)} </ul>;
+      })}
+    </div>
+  );
 }

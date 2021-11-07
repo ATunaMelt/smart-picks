@@ -1,33 +1,34 @@
 @import './colors.scss';
 
 .tournament {
+  display: flex;
+  flex-direction: row;
+  background: white;
+  padding: 25px;
+  overflow: scroll;
+
+  .round {
     display: flex;
-    flex-direction: row;
-    background: white;
-    padding: 25px;
-    overflow: scroll;
+    flex-direction: column;
+    list-style: none;
+    padding: 0 7px;
 
-    .round {
-      display: flex;
-      flex-direction: column;
-      list-style: none;
-      padding: 0 7px;
+    li Button {
+      width: 85px;
+      min-height: 28px;
+      font-size: 0.55rem;
+      padding: 5px;
+    }
 
-      li Button {
-        width: 85px;
-        min-height: 28px;
-        font-size: 0.55rem;
-        padding: 5px;
-      }
+    .spacer {
+      flex-grow: 2;
 
-      .spacer {
-        flex-grow: 2;
-
-        &:first-child, &:last-child {
-          flex-grow: 1;
-        }
+      &:first-child,
+      &:last-child {
+        flex-grow: 1;
       }
     }
+  }
 
   ul.round.round-5 {
     li.spacer {
@@ -36,13 +37,14 @@
       flex-grow: 0;
       height: 100px;
 
-      &:first-child, &:last-child {
+      &:first-child,
+      &:last-child {
         border: none;
         flex-grow: 2;
       }
     }
 
-    li.final Button{
+    li.final Button {
       text-align: center;
       font-size: 0.8rem;
     }
@@ -56,7 +58,11 @@
     border-left: 1px solid $bracket-blue;
   }
 
-  .round-1, .round-2, .round-3, .round-4, .round-5 {
+  .round-1,
+  .round-2,
+  .round-3,
+  .round-4,
+  .round-5 {
     .left .dash {
       width: 15px;
       height: 1px;
@@ -67,7 +73,11 @@
     }
   }
 
-  .round-1, .round-2, .round-3, .round-4, .round-5 {
+  .round-1,
+  .round-2,
+  .round-3,
+  .round-4,
+  .round-5 {
     .right .dash {
       width: 15px;
       height: 1px;
@@ -77,5 +87,4 @@
       background-color: $bracket-blue;
     }
   }
-
 }
