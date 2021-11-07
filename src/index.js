@@ -3,12 +3,14 @@ import ReactDOM from 'react-dom';
 import './styles/index.scss';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-
+import { MoralisProvider } from 'react-moralis';
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
+  <MoralisProvider>
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>
+    , document.getElementById('root')
+  </MoralisProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function
