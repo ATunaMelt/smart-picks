@@ -2,7 +2,7 @@ const { popoverClasses } = require('@mui/material');
 const { expect } = require('chai');
 const { ethers } = require('hardhat');
 
-const entryFee = BigInt(2846789628618318);
+const entryFee = BigInt(4846789628618318);
 
 describe('Pool', function () {
   let Pool;
@@ -11,7 +11,6 @@ describe('Pool', function () {
   let addr1;
   let addr2;
   let winnerStartingBalance;
-  let gas;
 
   before(async () => {
     Pool = await ethers.getContractFactory('Pool');
@@ -180,7 +179,7 @@ describe('Pool', function () {
           'Syracuse',
           'West Virginia',
           'Rutgers',
-          'Houston',
+          'Houston'
         ],
         [
           'Gonzaga',
@@ -198,7 +197,7 @@ describe('Pool', function () {
           'Loyola Chicago',
           'Oregon St.',
           'Syracuse',
-          'Houston',
+          'Houston'
         ],
         [
           'Gonzaga',
@@ -208,7 +207,7 @@ describe('Pool', function () {
           'Baylor',
           'Arkansas',
           'Oregon St.',
-          'Houston',
+          'Houston'
         ],
         ['Gonzaga', 'UCLA', 'Arkansas', 'Houston'],
         ['Gonzaga', 'Houston'],
@@ -259,7 +258,7 @@ describe('Pool', function () {
           'Syracuse',
           'West Virginia',
           'Rutgers',
-          'Houston',
+          'Houston'
         ],
         [
           'Gonzaga',
@@ -277,7 +276,7 @@ describe('Pool', function () {
           'Loyola Chicago',
           'Oregon St.',
           'Syracuse',
-          'Houston',
+          'Houston'
         ],
         [
           'Gonzaga',
@@ -287,19 +286,17 @@ describe('Pool', function () {
           'Baylor',
           'Arkansas',
           'Oregon St.',
-          'Houston',
+          'Houston'
         ],
         ['Gonzaga', 'UCLA', 'Baylor', 'Houston'],
         ['Gonzaga', 'Baylor'],
         'Baylor',
         { value: entryFee }
       );
-
     expect(entrant.from).to.equal(addr2.address);
 
     const numEntrants = await pool.getNumberEntries();
     expect(numEntrants).to.equal(2);
-    gas = winnerStartingBalance.sub(await addr2.getBalance());
   });
 
   it('should reject entrant from entering twice', async () => {
@@ -414,7 +411,7 @@ describe('Pool', function () {
         'Syracuse',
         'West Virginia',
         'Rutgers',
-        'Houston',
+        'Houston'
       ],
       [
         'Gonzaga',
@@ -432,7 +429,7 @@ describe('Pool', function () {
         'Loyola Chicago',
         'Oregon St.',
         'Syracuse',
-        'Houston',
+        'Houston'
       ],
       [
         'Gonzaga',
@@ -442,13 +439,12 @@ describe('Pool', function () {
         'Baylor',
         'Arkansas',
         'Oregon St.',
-        'Houston',
+        'Houston'
       ],
       ['Gonzaga', 'UCLA', 'Baylor', 'Houston'],
       ['Gonzaga', 'Baylor'],
       'Baylor'
     );
-
     const winner = await pool.getWinnerAddress();
     expect(winner).to.equal(addr2.address);
     expect((await addr2.getBalance()).gte(winnerStartingBalance));
