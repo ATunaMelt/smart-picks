@@ -136,7 +136,7 @@ contract Pool {
         string memory _overallWinner
     ) public payable {
         // logic to compare to all playersBracketMapping
-        address _winnerAddr;
+        address winnerAddress;
         uint256 winnerScore = 0;
         require(_roundOneWinners.length == 32);
         require(_roundTwoWinners.length == 16);
@@ -196,13 +196,14 @@ contract Pool {
 
             if (currentScoreForPlayer > winnerScore) {
                 winnerScore = currentScoreForPlayer;
-                _winnerAddr = playersBracketStruct.sender;
+                winnerAddress = playersBracketStruct.sender;
             }
         }
 
-        bool sent = payable(_winnerAddr).send(entryFee);
+        // bool sent = payable(winnerAddress).send(entryFee);
+        bool sent = payWinner(winnerAddress);
         require(sent, "Failed to send Ether");
-        winner = _winnerAddr;
+        winner = winnerAddress;
     }
 
     function totalRound(
@@ -242,6 +243,7 @@ contract Pool {
 
     function payWinner(address winnerAddress) internal returns (bool) {
         bool sent = payable(winnerAddress).send(etherInPot);
+
         return sent;
     }
 }

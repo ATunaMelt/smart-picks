@@ -12,10 +12,12 @@ describe('Pool', function () {
 
   before(async () => {
     Pool = await ethers.getContractFactory('Pool');
-    pool = await Pool.deploy(2, 2);
+    pool = await Pool.deploy(555555555555555, 2);
     await pool.deployed();
     [owner, addr1, addr2] = await ethers.getSigners();
     winnerStartingBalance = await addr2.getBalance();
+
+    console.log(winnerStartingBalance.toString());
   });
 
   it('should exist', () => {
@@ -64,7 +66,7 @@ describe('Pool', function () {
           'Syracuse',
           'West Virginia',
           'Rutgers',
-          'Houston',
+          'Houston'
         ],
         [
           'Gonzaga',
@@ -82,7 +84,7 @@ describe('Pool', function () {
           'Loyola Chicago',
           'Oregon St.',
           'Syracuse',
-          'Houston',
+          'Houston'
         ],
         [
           'Gonzaga',
@@ -92,12 +94,12 @@ describe('Pool', function () {
           'Baylor',
           'Arkansas',
           'Oregon St.',
-          'Houston',
+          'Houston'
         ],
         ['Gonzaga', 'UCLA', 'Arkansas', 'Houston'],
         ['Gonzaga', 'Houston'],
         'Gonzaga',
-        { value: 2 }
+        { value: 555555555555555 }
       );
 
     expect(entrant.from).to.equal(addr1.address);
@@ -143,7 +145,7 @@ describe('Pool', function () {
           'Syracuse',
           'West Virginia',
           'Rutgers',
-          'Houston',
+          'Houston'
         ],
         [
           'Gonzaga',
@@ -161,7 +163,7 @@ describe('Pool', function () {
           'Loyola Chicago',
           'Oregon St.',
           'Syracuse',
-          'Houston',
+          'Houston'
         ],
         [
           'Gonzaga',
@@ -171,14 +173,15 @@ describe('Pool', function () {
           'Baylor',
           'Arkansas',
           'Oregon St.',
-          'Houston',
+          'Houston'
         ],
         ['Gonzaga', 'UCLA', 'Baylor', 'Houston'],
         ['Gonzaga', 'Baylor'],
         'Baylor',
-        { value: 2 }
+        { value: 555555555555555 }
       );
-
+    console.log(winnerStartingBalance.sub(await addr2.getBalance()));
+    console.log(entrant.gasLimit.toString());
     expect(entrant.from).to.equal(addr2.address);
 
     const numEntrants = await pool.getNumberEntries();
@@ -225,7 +228,7 @@ describe('Pool', function () {
         'Syracuse',
         'West Virginia',
         'Rutgers',
-        'Houston',
+        'Houston'
       ],
       [
         'Gonzaga',
@@ -243,7 +246,7 @@ describe('Pool', function () {
         'Loyola Chicago',
         'Oregon St.',
         'Syracuse',
-        'Houston',
+        'Houston'
       ],
       [
         'Gonzaga',
@@ -253,14 +256,23 @@ describe('Pool', function () {
         'Baylor',
         'Arkansas',
         'Oregon St.',
-        'Houston',
+        'Houston'
       ],
       ['Gonzaga', 'UCLA', 'Baylor', 'Houston'],
       ['Gonzaga', 'Baylor'],
       'Baylor'
     );
-
     const winner = await pool.getWinnerAddress();
     expect(winner).to.equal(addr2.address);
+    const afterWinning = await addr2.getBalance();
+    const afterLosing = await addr1.getBalance();
+
+    console.log(afterWinning.toString());
+    console.log(afterLosing.toString());
+  });
+  it('should send the SC balamce to the winner', async () => {
+    let whichBigger = await afterWinning.gt(winnerStartingBalance);
+    console.log(whichBigger);
+    expect(whichBigger).to.be.true();
   });
 });
