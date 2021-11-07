@@ -33,7 +33,6 @@ contract Pool {
     address winner;
     // Uints are initialized to 0 automatically
     uint256 public numberOfPlayers;
-    bool addressHasEntered;
 
     struct BracketEntry {
         string teamName;
@@ -44,6 +43,7 @@ contract Pool {
         string[] roundFiveWinners;
         string overallWinner;
         address sender;
+        bool hasEntered;
     }
 
     mapping(address => BracketEntry) public playersBracketMapping;
@@ -82,6 +82,11 @@ contract Pool {
         string[] memory _roundFiveWinners,
         string memory _overallWinner
     ) public payable returns (address) {
+        // should protect against reentrancy
+        require(
+            playersBracketMapping[msg.sender].hasEntered != true,
+            "Sender has already entered bracket"
+        );
         require(msg.value >= entryFee, "Entry fee not sufficient");
         require(
             _roundOneWinners.length == 32,
@@ -104,11 +109,6 @@ contract Pool {
             "roundFiveWinners length incorrect"
         );
 
-        require(
-            abi.encode(playersBracketMapping[msg.sender]).length > 0,
-            "Sender has already entered bracket"
-        );
-
         playersBracketMapping[msg.sender] = BracketEntry(
             _teamName,
             _roundOneWinners,
@@ -117,7 +117,8 @@ contract Pool {
             _roundFourWinners,
             _roundFiveWinners,
             _overallWinner,
-            msg.sender
+            msg.sender,
+            true
         );
 
         playersAddressMapping[numberOfPlayers] = msg.sender;
@@ -145,6 +146,7 @@ contract Pool {
         require(_roundFiveWinners.length == 2);
 
         // todo: add in require for only keeper can call this function
+
 
         for (uint256 i = 0; i <= numberOfPlayers - 1; i++) {
             uint256 currentScoreForPlayer = 0;
