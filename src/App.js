@@ -5,6 +5,7 @@ import {
   Switch,
   Route
 } from 'react-router-dom';
+import BracketPage from './pages/brackets';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         <Route path='/brackets/:id'>
           <div> View Bracket </div>
         </Route>
+        <Route path='/brackets' component={BracketPage} />
         <Route path='/about'>
           <div> About </div>
         </Route>
