@@ -1,14 +1,13 @@
 import './styles/App.scss';
 import Header from './components/header.js';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import { Main } from './components/Main.js';
+import BracketPage from './pages/brackets';
 
 function App() {
   return (
     <Router>
       <div className='App'>
         <Header />
-        {/* <Main /> */}
         <div className='background' />
         <Switch>
           <Route path='/pool/new'>
@@ -23,6 +22,7 @@ function App() {
           <Route path='/brackets/:id'>
             <div> View Bracket </div>
           </Route>
+          <Route path='/brackets' component={BracketPage} />
           <Route path='/about'>
             <div> About </div>
           </Route>
