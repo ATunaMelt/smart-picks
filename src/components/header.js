@@ -13,7 +13,7 @@ export default function Header() {
     isAuthenticated,
     logout,
     isAuthenticating,
-    isWeb3EnableLoading
+    isWeb3EnableLoading,
   } = useMoralis();
 
   const enableAndAuthenticate = async () => {
@@ -61,13 +61,14 @@ export default function Header() {
             {
               <button
                 onClick={() => {
-                  if (!isWeb3Enabled || isAuthenticated) {
+                  if (!isWeb3Enabled || !isAuthenticated) {
                     enableAndAuthenticate();
                   } else logout();
                 }}
               >
                 {(isAuthenticating || isWeb3EnableLoading) && 'Loading'}
-                {(!isAuthenticated || !isWeb3EnableLoading) && '🦊 '}
+                {(!isAuthenticated || !isWeb3EnableLoading) &&
+                  '🦊 Login with Metamask'}
                 {isAuthenticated && '  Logout'}
               </button>
             }
