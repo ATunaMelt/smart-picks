@@ -1,4 +1,4 @@
-import { AppBar, Box, Toolbar, MenuItem, Typography } from '@mui/material';
+import { AppBar, Toolbar, MenuItem, Typography } from '@mui/material';
 import { StylesProvider } from '@material-ui/core/styles';
 import '../styles/App.scss';
 import { NavLink } from 'react-router-dom';
@@ -18,7 +18,6 @@ export default function Header() {
 
   return (
     <StylesProvider injectFirst>
-      <Box sx={{ flexGrow: 1 }}>
         <AppBar position='fixed' className='primary-background'>
           <Toolbar className='primary-background'>
             <Typography variant='h6' component='div' to={'/'} sx={{ flexGrow: 1 }}>
@@ -30,7 +29,6 @@ export default function Header() {
             {createMenuItem('/about', 'About')}
           </Toolbar>
         </AppBar>
-      </Box>
     </StylesProvider>
   );
 }
