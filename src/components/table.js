@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Box,
+import {
+  Box,
   TableBody,
   TableCell,
   TableContainer,
@@ -9,21 +10,23 @@ import { Box,
   TableRow,
   TableSortLabel,
   Paper,
-  Table} from '@mui/material';
+  Table,
+} from '@mui/material';
 import { StylesProvider } from '@material-ui/core/styles';
 import { visuallyHidden } from '@mui/utils';
-import { POOL_CONSTANTS, BRACKET_CONSTANTS } from '../constants/table-constants.js';
+import {
+  POOL_CONSTANTS,
+  BRACKET_CONSTANTS,
+} from '../constants/table-constants.js';
 import '../styles/App.scss';
 
 // example pool table data
 const poolData = [
-  {title:'awesome pool', price:'2', entrants:'1', participants:'50'}
+  { title: 'awesome pool', price: '2', entrants: '1', participants: '50' },
 ];
 
 //example bracket table data
-const bracketData = [
-  {title:'awesome bracket', winner:'me'}
-];
+const bracketData = [{ title: 'awesome bracket', winner: 'me' }];
 
 /**
  * Maps smart contract data into rows for the table
@@ -34,10 +37,10 @@ const bracketData = [
 function createData(type, data) {
   const formattedData = {};
   if (type === 'pool') {
-    POOL_CONSTANTS.forEach((col) => formattedData[col.id] = data[col.id]);
+    POOL_CONSTANTS.forEach((col) => (formattedData[col.id] = data[col.id]));
     formattedData.entrants += `/${data.participants}`;
   } else {
-    BRACKET_CONSTANTS.forEach((col) => formattedData[col.id] = data[col.id]);
+    BRACKET_CONSTANTS.forEach((col) => (formattedData[col.id] = data[col.id]));
   }
 
   return formattedData;
@@ -54,7 +57,7 @@ function createData(type, data) {
 function descendingComparator(a, b, orderBy, isNumeric) {
   let numB = b[orderBy];
   let numA = a[orderBy];
-  if(isNumeric) {
+  if (isNumeric) {
     numB = parseInt(b[orderBy].split('/')[0], 10);
     numA = parseInt(a[orderBy].split('/')[0], 10);
   }
@@ -87,33 +90,34 @@ function EnhancedTableHead(props) {
 
   return (
     <StylesProvider injectFirst>
-
-    <TableHead className='secondary-background'>
-      <TableRow>
-        <TableCell padding='checkbox' />
-        {headCells.map((headCell) => (
-          <TableCell
-            key={headCell.id}
-            align={headCell.numeric ? 'right' : 'left'}
-            padding={headCell.disablePadding ? 'none' : 'normal'}
-            sortDirection={orderBy === headCell.id ? order : false}
-          >
-            <TableSortLabel
-              active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : 'asc'}
-              onClick={createSortHandler(headCell.id)}
+      <TableHead className='secondary-background'>
+        <TableRow>
+          <TableCell padding='checkbox' />
+          {headCells.map((headCell) => (
+            <TableCell
+              key={headCell.id}
+              align={headCell.numeric ? 'right' : 'left'}
+              padding={headCell.disablePadding ? 'none' : 'normal'}
+              sortDirection={orderBy === headCell.id ? order : false}
             >
-              {headCell.label}
-              {orderBy === headCell.id ? (
-                <Box component='span' sx={visuallyHidden}>
-                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                </Box>
-              ) : null}
-            </TableSortLabel>
-          </TableCell>
-        ))}
-      </TableRow>
-    </TableHead>
+              <TableSortLabel
+                active={orderBy === headCell.id}
+                direction={orderBy === headCell.id ? order : 'asc'}
+                onClick={createSortHandler(headCell.id)}
+              >
+                {headCell.label}
+                {orderBy === headCell.id ? (
+                  <Box component='span' sx={visuallyHidden}>
+                    {order === 'desc'
+                      ? 'sorted descending'
+                      : 'sorted ascending'}
+                  </Box>
+                ) : null}
+              </TableSortLabel>
+            </TableCell>
+          ))}
+        </TableRow>
+      </TableHead>
     </StylesProvider>
   );
 }
@@ -173,7 +177,9 @@ export default function CustomTable(props) {
               type={type}
             />
             <TableBody>
-              {rows.slice().sort(getComparator(order, orderBy, headers))
+              {rows
+                .slice()
+                .sort(getComparator(order, orderBy, headers))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   return (
@@ -187,7 +193,11 @@ export default function CustomTable(props) {
                         {/*  todo: add in check mark if user is in pool */}
                       </TableCell>
                       {headers.map((column) => {
-                        return <TableCell align={column.numeric ? 'right' : 'left'}>{row[column.id]}</TableCell>
+                        return (
+                          <TableCell align={column.numeric ? 'right' : 'left'}>
+                            {row[column.id]}
+                          </TableCell>
+                        );
                       })}
                     </TableRow>
                   );
@@ -220,5 +230,5 @@ export default function CustomTable(props) {
 
 CustomTable.propTypes = {
   type: PropTypes.oneOf(['pool', 'bracket']).isRequired,
-  data: PropTypes.array.isRequired
+  data: PropTypes.array.isRequired,
 };
