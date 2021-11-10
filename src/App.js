@@ -2,6 +2,7 @@ import './styles/App.scss';
 import Header from './components/header.js';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import BracketPage from './pages/brackets';
+import CreatePool from './pages/createPool';
 
 function App() {
   return (
@@ -10,9 +11,7 @@ function App() {
         <Header />
         <div className='background' />
         <Switch>
-          <Route path='/pool/new'>
-            <div>New Pool </div>
-          </Route>
+          <Route path='/pool/new' component={CreatePool} />
           <Route path='/pool/:id'>
             <div>Join Pool </div>
           </Route>
