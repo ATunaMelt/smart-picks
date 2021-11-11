@@ -26,120 +26,122 @@ describe('Pool', function () {
   });
 
   it('should reject an entrant with insufficient funds', async () => {
-      await expect(pool
-      .connect(addr1)
-      .enterPool(
-        'coles team',
-        [
+    await expect(
+      pool
+        .connect(addr1)
+        .enterPool(
+          'coles team',
+          [
+            'Gonzaga',
+            'Oklahoma',
+            'Creighton',
+            'Ohio',
+            'USC',
+            'Kansas',
+            'Oregon',
+            'Iowa',
+            'Michigan',
+            'LSU',
+            'Colorado',
+            'Florida St.',
+            'UCLA',
+            'Abilene Christian',
+            'Maryland',
+            'Alabama',
+            'Baylor',
+            'Wisconsin',
+            'Villanova',
+            'North Texas',
+            'Texas Tech',
+            'Arkansas',
+            'Florida',
+            'Oral Roberts',
+            'Illinois',
+            'Loyola Chicago',
+            'Oregon St.',
+            'Oklahoma St.',
+            'Syracuse',
+            'West Virginia',
+            'Rutgers',
+            'Houston',
+          ],
+          [
+            'Gonzaga',
+            'Creighton',
+            'USC',
+            'Oregon',
+            'Michigan',
+            'Florida St.',
+            'UCLA',
+            'Alabama',
+            'Baylor',
+            'Villanova',
+            'Arkansas',
+            'Oral Roberts',
+            'Loyola Chicago',
+            'Oregon St.',
+            'Syracuse',
+            'Houston',
+          ],
+          [
+            'Gonzaga',
+            'USC',
+            'Michigan',
+            'UCLA',
+            'Baylor',
+            'Arkansas',
+            'Oregon St.',
+            'Houston',
+          ],
+          ['Gonzaga', 'UCLA', 'Arkansas', 'Houston'],
+          ['Gonzaga', 'Houston'],
           'Gonzaga',
-          'Oklahoma',
-          'Creighton',
-          'Ohio',
-          'USC',
-          'Kansas',
-          'Oregon',
-          'Iowa',
-          'Michigan',
-          'LSU',
-          'Colorado',
-          'Florida St.',
-          'UCLA',
-          'Abilene Christian',
-          'Maryland',
-          'Alabama',
-          'Baylor',
-          'Wisconsin',
-          'Villanova',
-          'North Texas',
-          'Texas Tech',
-          'Arkansas',
-          'Florida',
-          'Oral Roberts',
-          'Illinois',
-          'Loyola Chicago',
-          'Oregon St.',
-          'Oklahoma St.',
-          'Syracuse',
-          'West Virginia',
-          'Rutgers',
-          'Houston',
-        ],
-        [
-          'Gonzaga',
-          'Creighton',
-          'USC',
-          'Oregon',
-          'Michigan',
-          'Florida St.',
-          'UCLA',
-          'Alabama',
-          'Baylor',
-          'Villanova',
-          'Arkansas',
-          'Oral Roberts',
-          'Loyola Chicago',
-          'Oregon St.',
-          'Syracuse',
-          'Houston',
-        ],
-        [
-          'Gonzaga',
-          'USC',
-          'Michigan',
-          'UCLA',
-          'Baylor',
-          'Arkansas',
-          'Oregon St.',
-          'Houston',
-        ],
-        ['Gonzaga', 'UCLA', 'Arkansas', 'Houston'],
-        ['Gonzaga', 'Houston'],
-        'Gonzaga',
-        { value: 1 }
-      )).to.be.revertedWith('Entry fee not sufficient');
+          { value: 1 }
+        )
+    ).to.be.revertedWith('Entry fee not sufficient');
   });
 
   it('should reject an entrant with malformed data', async () => {
-    await expect(pool
-    .connect(addr1)
-    .enterPool(
-      'coles team',
-      [
-        'Gonzaga'
-      ],
-      [
-        'Gonzaga',
-        'Creighton',
-        'USC',
-        'Oregon',
-        'Michigan',
-        'Florida St.',
-        'UCLA',
-        'Alabama',
-        'Baylor',
-        'Villanova',
-        'Arkansas',
-        'Oral Roberts',
-        'Loyola Chicago',
-        'Oregon St.',
-        'Syracuse',
-        'Houston',
-      ],
-      [
-        'Gonzaga',
-        'USC',
-        'Michigan',
-        'UCLA',
-        'Baylor',
-        'Arkansas',
-        'Oregon St.',
-        'Houston',
-      ],
-      ['Gonzaga', 'UCLA', 'Arkansas', 'Houston'],
-      ['Gonzaga', 'Houston'],
-      'Gonzaga',
-      { value: 2 }
-    )).to.be.revertedWith('roundOneWinners length incorrect');
+    await expect(
+      pool
+        .connect(addr1)
+        .enterPool(
+          'coles team',
+          ['Gonzaga'],
+          [
+            'Gonzaga',
+            'Creighton',
+            'USC',
+            'Oregon',
+            'Michigan',
+            'Florida St.',
+            'UCLA',
+            'Alabama',
+            'Baylor',
+            'Villanova',
+            'Arkansas',
+            'Oral Roberts',
+            'Loyola Chicago',
+            'Oregon St.',
+            'Syracuse',
+            'Houston',
+          ],
+          [
+            'Gonzaga',
+            'USC',
+            'Michigan',
+            'UCLA',
+            'Baylor',
+            'Arkansas',
+            'Oregon St.',
+            'Houston',
+          ],
+          ['Gonzaga', 'UCLA', 'Arkansas', 'Houston'],
+          ['Gonzaga', 'Houston'],
+          'Gonzaga',
+          { value: 2 }
+        )
+    ).to.be.revertedWith('roundOneWinners length incorrect');
   });
 
   it('should allow an entrant', async () => {
@@ -179,7 +181,7 @@ describe('Pool', function () {
           'Syracuse',
           'West Virginia',
           'Rutgers',
-          'Houston'
+          'Houston',
         ],
         [
           'Gonzaga',
@@ -197,7 +199,7 @@ describe('Pool', function () {
           'Loyola Chicago',
           'Oregon St.',
           'Syracuse',
-          'Houston'
+          'Houston',
         ],
         [
           'Gonzaga',
@@ -207,7 +209,7 @@ describe('Pool', function () {
           'Baylor',
           'Arkansas',
           'Oregon St.',
-          'Houston'
+          'Houston',
         ],
         ['Gonzaga', 'UCLA', 'Arkansas', 'Houston'],
         ['Gonzaga', 'Houston'],
@@ -258,7 +260,7 @@ describe('Pool', function () {
           'Syracuse',
           'West Virginia',
           'Rutgers',
-          'Houston'
+          'Houston',
         ],
         [
           'Gonzaga',
@@ -276,7 +278,7 @@ describe('Pool', function () {
           'Loyola Chicago',
           'Oregon St.',
           'Syracuse',
-          'Houston'
+          'Houston',
         ],
         [
           'Gonzaga',
@@ -286,7 +288,7 @@ describe('Pool', function () {
           'Baylor',
           'Arkansas',
           'Oregon St.',
-          'Houston'
+          'Houston',
         ],
         ['Gonzaga', 'UCLA', 'Baylor', 'Houston'],
         ['Gonzaga', 'Baylor'],
@@ -300,82 +302,82 @@ describe('Pool', function () {
   });
 
   it('should reject entrant from entering twice', async () => {
-    await expect(pool
-      .connect(addr2)
-      .enterPool(
-        'BECKS team',
-        [
-          'Gonzaga',
-          'Oklahoma',
-          'Creighton',
-          'Ohio',
-          'USC',
-          'Kansas',
-          'Oregon',
-          'Iowa',
-          'Michigan',
-          'LSU',
-          'Colorado',
-          'Florida St.',
-          'UCLA',
-          'Abilene Christian',
-          'Maryland',
-          'Alabama',
+    await expect(
+      pool
+        .connect(addr2)
+        .enterPool(
+          'BECKS team',
+          [
+            'Gonzaga',
+            'Oklahoma',
+            'Creighton',
+            'Ohio',
+            'USC',
+            'Kansas',
+            'Oregon',
+            'Iowa',
+            'Michigan',
+            'LSU',
+            'Colorado',
+            'Florida St.',
+            'UCLA',
+            'Abilene Christian',
+            'Maryland',
+            'Alabama',
+            'Baylor',
+            'Wisconsin',
+            'Villanova',
+            'North Texas',
+            'Texas Tech',
+            'Arkansas',
+            'Florida',
+            'Oral Roberts',
+            'Illinois',
+            'Loyola Chicago',
+            'Oregon St.',
+            'Oklahoma St.',
+            'Syracuse',
+            'West Virginia',
+            'Rutgers',
+            'Houston',
+          ],
+          [
+            'Gonzaga',
+            'Creighton',
+            'USC',
+            'Oregon',
+            'Michigan',
+            'Florida St.',
+            'UCLA',
+            'Alabama',
+            'Baylor',
+            'Villanova',
+            'Arkansas',
+            'Oral Roberts',
+            'Loyola Chicago',
+            'Oregon St.',
+            'Syracuse',
+            'Houston',
+          ],
+          [
+            'Gonzaga',
+            'USC',
+            'Michigan',
+            'UCLA',
+            'Baylor',
+            'Arkansas',
+            'Oregon St.',
+            'Houston',
+          ],
+          ['Gonzaga', 'UCLA', 'Baylor', 'Houston'],
+          ['Gonzaga', 'Baylor'],
           'Baylor',
-          'Wisconsin',
-          'Villanova',
-          'North Texas',
-          'Texas Tech',
-          'Arkansas',
-          'Florida',
-          'Oral Roberts',
-          'Illinois',
-          'Loyola Chicago',
-          'Oregon St.',
-          'Oklahoma St.',
-          'Syracuse',
-          'West Virginia',
-          'Rutgers',
-          'Houston',
-        ],
-        [
-          'Gonzaga',
-          'Creighton',
-          'USC',
-          'Oregon',
-          'Michigan',
-          'Florida St.',
-          'UCLA',
-          'Alabama',
-          'Baylor',
-          'Villanova',
-          'Arkansas',
-          'Oral Roberts',
-          'Loyola Chicago',
-          'Oregon St.',
-          'Syracuse',
-          'Houston',
-        ],
-        [
-          'Gonzaga',
-          'USC',
-          'Michigan',
-          'UCLA',
-          'Baylor',
-          'Arkansas',
-          'Oregon St.',
-          'Houston',
-        ],
-        ['Gonzaga', 'UCLA', 'Baylor', 'Houston'],
-        ['Gonzaga', 'Baylor'],
-        'Baylor',
-        { value: 2 }
-      )).to.be.revertedWith('Sender has already entered bracket');
+          { value: 2 }
+        )
+    ).to.be.revertedWith('Sender has already entered bracket');
   });
 
-  it('should reject closePool calls from anyone other than the pool', async () => {
-
-  });
+  it('should reject closePool calls from anyone other than the pool', async () => {});
 
   it('should return the winning address on close', async () => {
     await pool.closePool(
@@ -411,7 +413,7 @@ describe('Pool', function () {
         'Syracuse',
         'West Virginia',
         'Rutgers',
-        'Houston'
+        'Houston',
       ],
       [
         'Gonzaga',
@@ -429,7 +431,7 @@ describe('Pool', function () {
         'Loyola Chicago',
         'Oregon St.',
         'Syracuse',
-        'Houston'
+        'Houston',
       ],
       [
         'Gonzaga',
@@ -439,7 +441,7 @@ describe('Pool', function () {
         'Baylor',
         'Arkansas',
         'Oregon St.',
-        'Houston'
+        'Houston',
       ],
       ['Gonzaga', 'UCLA', 'Baylor', 'Houston'],
       ['Gonzaga', 'Baylor'],

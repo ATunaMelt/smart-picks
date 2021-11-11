@@ -12,6 +12,7 @@
 /build
 /artifacts
 /cache
+/src/constants
 # misc
 .DS_Store
 .env.local

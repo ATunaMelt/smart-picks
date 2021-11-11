@@ -6,14 +6,19 @@
   width: 100%;
   background: url('./blank-bracket.png') no-repeat center center fixed;
   opacity: 0.1;
-  z-index:-1;
+  z-index: -1;
   background-size: 100%;
   left: 0;
 }
 
 .name {
   width: 100%;
-  background: linear-gradient(to top, white 0 49%, rgba(0, 0, 0, 0.1) 0 51%, white 0);
+  background: linear-gradient(
+    to top,
+    white 0 49%,
+    rgba(0, 0, 0, 0.1) 0 51%,
+    white 0
+  );
 
   h2 {
     background: white;
@@ -39,6 +44,28 @@
   p {
     text-align: center;
   }
+
+  .create-section {
+    margin: auto;
+    text-align: center;
+    padding: 10px;
+
+    .input-group {
+      padding: 5px;
+
+      label {
+        margin-right: 10px;
+        width: 200px;
+        display: inline-block;
+        text-align: left;
+        vertical-align: bottom;
+      }
+    }
+
+    button {
+      margin-top: 10px;
+    }
+  }
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -60,7 +87,8 @@
   background-color: $primary-color;
 }
 
-.primary-hover:hover, .selected{
+.primary-hover:hover,
+.selected {
   border-bottom: 2px solid $primary-highlight-color !important;
 }
 
