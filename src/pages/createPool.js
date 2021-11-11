@@ -33,43 +33,48 @@ export default function CreatePool() {
   return (
     <div className='page'>
       <Title title='Create Pool' />
-      <p>
-        <label for='name'>Enter name for the pool: </label>
-        <Input
-          name='name'
-          type='string'
-          defaultValue={poolName}
-          onChange={(event) => {
-            handleInputChange(event, 'name');
-          }}
-        />
-      </p>
 
-      <p>
-        <label for='players'>Enter Number of players:</label>
-        <Input
-          name='players'
-          type='number'
-          defaultValue={maximumPlayers}
-          inputProps={{ min: '2' }}
-          onChange={(event) => {
-            handleInputChange(event, 'players');
-          }}
-        />
-      </p>
-      <p>
-        <label for='fee'>Enter entry fee:</label>
-        <Input
-          name='fee'
-          type='number'
-          defaultValue={entryFee}
-          inputProps={{ min: '1' }}
-          onChange={(event) => {
-            handleInputChange(event, 'fee');
-          }}
-        />
-      </p>
-      <Button onClick={createNewSmartContract}>{'Create Pool'}</Button>
+      <div className='create-section'>
+        <div className='input-group'>
+          <label for='name'>Enter name for the pool: </label>
+          <Input
+            name='name'
+            type='string'
+            defaultValue={poolName}
+            onChange={(event) => {
+              handleInputChange(event, 'name');
+            }}
+          />
+        </div>
+
+        <div className='input-group'>
+          <label for='players'>Enter Number of players:</label>
+          <Input
+            name='players'
+            type='number'
+            defaultValue={maximumPlayers}
+            inputProps={{ min: '2' }}
+            onChange={(event) => {
+              handleInputChange(event, 'players');
+            }}
+          />
+        </div>
+        <div className='input-group'>
+          <label for='fee'>Enter entry fee:</label>
+          <Input
+            name='fee'
+            type='number'
+            defaultValue={entryFee}
+            inputProps={{ min: '1' }}
+            onChange={(event) => {
+              handleInputChange(event, 'fee');
+            }}
+          />
+        </div>
+        <Button variant='outlined' onClick={createNewSmartContract}>
+          {'Create Pool'}
+        </Button>
+      </div>
     </div>
   );
 }
