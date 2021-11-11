@@ -4,48 +4,65 @@ import { useState } from 'react';
 import { useMoralis } from 'react-moralis';
 import Title from '../components/title';
 import { abi } from '../constants/PoolFactory.json';
-
-const poolFactoryAddress = '0xfa27c64a57851e4e586b39b06fa91e0592fb25bc';
+import poolFactoryAddress from '../constants/poolFactoryAddress.js';
 
 export default function CreatePool() {
   const { Moralis } = useMoralis();
-  console.log(Moralis);
   const options = { abi, contractAddress: poolFactoryAddress };
-  const [entryFee, setEntryFee] = useState(0);
-  const [maximumPlayers, setMaximumPlayers] = useState(0);
+  const [entryFee, setEntryFee] = useState(1);
+  const [maximumPlayers, setMaximumPlayers] = useState(2);
+  const [poolName, setPoolName] = useState('');
 
   const createNewSmartContract = async (event) => {
-    console.log(entryFee, maximumPlayers);
     let tx = await Moralis.executeFunction({
       functionName: 'createNewPool',
-      params: { _entryFee: entryFee, _maximumPlayers: maximumPlayers },
+      params: {
+        _poolName: poolName,
+        _entryFee: entryFee,
+        _maximumPlayers: maximumPlayers,
+      },
       ...options,
     });
   };
   const handleInputChange = (event, contractInput) => {
-    let newAmount = event.target.value === 2 ? 2 : event.target.value;
-    console.log(newAmount);
-    if (contractInput === 'entrants') setMaximumPlayers(newAmount);
-    if (contractInput === 'fee') setEntryFee(newAmount);
+    if (contractInput === 'players') setMaximumPlayers(event.target.value);
+    if (contractInput === 'fee') setEntryFee(event.target.value);
+    if (contractInput === 'name') setPoolName(event.target.value);
   };
 
   return (
     <div className='page'>
-      <Title title='My Brackets' />
+      <Title title='Create Pool' />
       <p>
-        Enter Number of players:
+        <label for='name'>Enter name for the pool: </label>
         <Input
+          name='name'
+          type='string'
+          defaultValue={poolName}
+          onChange={(event) => {
+            handleInputChange(event, 'name');
+          }}
+        />
+      </p>
+
+      <p>
+        <label for='players'>Enter Number of players:</label>
+        <Input
+          name='players'
           type='number'
+          defaultValue={maximumPlayers}
           inputProps={{ min: '2' }}
           onChange={(event) => {
-            handleInputChange(event, 'entrants');
+            handleInputChange(event, 'players');
           }}
         />
       </p>
       <p>
-        Enter entry fee:
+        <label for='fee'>Enter entry fee:</label>
         <Input
+          name='fee'
           type='number'
+          defaultValue={entryFee}
           inputProps={{ min: '1' }}
           onChange={(event) => {
             handleInputChange(event, 'fee');

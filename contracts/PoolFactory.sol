@@ -5,12 +5,14 @@ import "./Pool.sol";
 contract PoolFactory {
     Pool[] public poolArray;
     uint256 public numberOfPoolContracts;
+    string public poolName;
 
-    function createNewPool(uint256 _entryFee, uint256 _maximumPlayers)
-        public
-        returns (address)
-    {
-        Pool pool = new Pool(_entryFee, _maximumPlayers);
+    function createNewPool(
+        string memory _poolName,
+        uint256 _entryFee,
+        uint256 _maximumPlayers
+    ) public returns (address) {
+        Pool pool = new Pool(_poolName, _entryFee, _maximumPlayers);
         poolArray.push(pool);
         numberOfPoolContracts++;
         return address(pool);

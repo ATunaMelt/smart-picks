@@ -26,6 +26,7 @@ Pool contract lifecycle
  * @dev Store & retrieveRules value in a variable
  */
 contract Pool {
+    string public poolName;
     uint256 public entryFee;
     uint256 public maximumPlayers;
     uint256 points;
@@ -51,7 +52,12 @@ contract Pool {
     mapping(uint256 => address) public playersAddressMapping;
     mapping(uint256 => address) private playersTotalPoints;
 
-    constructor(uint256 _entryFee, uint256 _maximumPlayers) {
+    constructor(
+        string memory _poolName,
+        uint256 _entryFee,
+        uint256 _maximumPlayers
+    ) {
+        poolName = _poolName;
         entryFee = _entryFee;
         maximumPlayers = _maximumPlayers;
         etherInPot = 0;
