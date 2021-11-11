@@ -40,10 +40,14 @@ async function main() {
   // console.log('pool artifact', poolArtifact);
   // console.log('Facotry articat', poolFactoryArtifact);
 
-  fs.writeFileSync('src/constants/contract-address.txt', address, (err) => {
-    console.log('contract-address, now contains', poolFactory);
-    if (err) throw err;
-  });
+  fs.writeFileSync(
+    'src/constants/poolFactoryAddress.js',
+    `export default '${address}';`,
+    (err) => {
+      console.log('contract-address, now contains', poolFactory);
+      if (err) throw err;
+    }
+  );
   fs.writeFileSync('src/constants/Pool.json', poolJson, (err) => {
     console.log('poolJson, now contains', poolJson);
     if (err) throw err;
