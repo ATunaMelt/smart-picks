@@ -26,6 +26,7 @@ Pool contract lifecycle
  * @dev Store & retrieveRules value in a variable
  */
 contract Pool {
+    string public poolName;
     uint256 public entryFee;
     uint256 public maximumPlayers;
     uint256 points;
@@ -33,6 +34,7 @@ contract Pool {
     address winner;
     // Uints are initialized to 0 automatically
     uint256 public numberOfPlayers;
+    bool addressHasEntered;
 
     struct BracketEntry {
         string teamName;
@@ -50,7 +52,12 @@ contract Pool {
     mapping(uint256 => address) public playersAddressMapping;
     mapping(uint256 => address) private playersTotalPoints;
 
-    constructor(uint256 _entryFee, uint256 _maximumPlayers) {
+    constructor(
+        string memory _poolName,
+        uint256 _entryFee,
+        uint256 _maximumPlayers
+    ) {
+        poolName = _poolName;
         entryFee = _entryFee;
         maximumPlayers = _maximumPlayers;
         etherInPot = 0;
@@ -146,7 +153,6 @@ contract Pool {
         require(_roundFiveWinners.length == 2);
 
         // todo: add in require for only keeper can call this function
-
 
         for (uint256 i = 0; i <= numberOfPlayers - 1; i++) {
             uint256 currentScoreForPlayer = 0;
