@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import BracketPage from './pages/brackets';
 import CreatePool from './pages/createPool';
 import ViewPools from './pages/viewPools';
+import JoinPool from './pages/joinPool';
 
 function App() {
   return (
@@ -13,9 +14,7 @@ function App() {
         <div className='background' />
         <Switch>
           <Route path='/pool/new' component={CreatePool} />
-          <Route path='/pool/:id'>
-            <div>Join Pool </div>
-          </Route>
+          <Route path='/pool/:id' component={JoinPool} />
           <Route path='/brackets/new'>
             <div>New Bracket </div>
           </Route>
