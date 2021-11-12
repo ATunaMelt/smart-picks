@@ -38,7 +38,7 @@ function createData(type, data) {
   const formattedData = {};
   if (type === 'pool') {
     POOL_CONSTANTS.forEach((col) => (formattedData[col.id] = data[col.id]));
-    formattedData.entrants += `/${data.participants}`;
+    formattedData.entrants += `/${data.maxPlayers}`;
   } else {
     BRACKET_CONSTANTS.forEach((col) => (formattedData[col.id] = data[col.id]));
   }

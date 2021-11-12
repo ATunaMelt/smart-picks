@@ -4,6 +4,13 @@ import './styles/index.scss';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { MoralisProvider } from 'react-moralis';
+/* Moralis init code */
+const Moralis = require('moralis');
+const serverUrl = process.env.REACT_APP_MORALIS_SERVER_URL;
+const appId = process.env.REACT_APP_MORALIS_APP_ID;
+
+Moralis.start({ serverUrl, appId });
+
 ReactDOM.render(
   <MoralisProvider
     appId={process.env.REACT_APP_MORALIS_APP_ID}
