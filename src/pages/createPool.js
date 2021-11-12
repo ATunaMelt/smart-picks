@@ -36,7 +36,7 @@ export default function CreatePool() {
 
       <div className='create-section'>
         <div className='input-group'>
-          <label for='name'>Enter name for the pool: </label>
+          <label htmlFor='name'>Enter name for the pool: </label>
           <Input
             name='name'
             type='string'
@@ -48,7 +48,7 @@ export default function CreatePool() {
         </div>
 
         <div className='input-group'>
-          <label for='players'>Enter Number of players:</label>
+          <label htmlFor='players'>Enter Number of players:</label>
           <Input
             name='players'
             type='number'
@@ -60,7 +60,7 @@ export default function CreatePool() {
           />
         </div>
         <div className='input-group'>
-          <label for='fee'>Enter entry fee:</label>
+          <label htmlFor='fee'>Enter entry fee:</label>
           <Input
             name='fee'
             type='number'
