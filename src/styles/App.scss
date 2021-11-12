@@ -44,8 +44,10 @@
   .pull-right {
     float: right;
   }
-  Button {
-    margin-left: 5px;
+  .center {
+    text-align:center;
+    margin: auto;
+    display:block;
   }
 
   a {
