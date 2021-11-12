@@ -2,11 +2,9 @@ import { useState, useEffect } from 'react';
 import CustomTable from '../components/table.js';
 import Title from '../components/title.js';
 import { TextField } from '@mui/material';
-import { Web3Provider } from '@ethersproject/providers';
 import { useMoralis } from 'react-moralis';
 import { abi as factoryABI } from '../constants/PoolFactory.json';
 import { abi as poolABI } from '../constants/Pool.json';
-
 import poolFactoryAddress from '../constants/poolFactoryAddress.js';
 import { Button } from '@mui/material';
 
@@ -34,12 +32,9 @@ export default function ViewPools() {
       functionName: 'getAllPools',
       ...factoryOptions,
     });
-    // console.log('return form tx', tx[2]);
 
     if (tx[2].length !== poolAddresses.length) {
       let poolDetails = tx[2].map(async (address) => {
-        // retrieve pool info from address
-
         let rules = await Moralis.executeFunction({
           functionName: 'retrieveRules',
           contractAddress: address,

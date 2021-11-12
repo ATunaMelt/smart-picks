@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { NavLink, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
   Box,
@@ -130,6 +131,7 @@ EnhancedTableHead.propTypes = {
 };
 
 export default function CustomTable(props) {
+  const [redirect, setRedirect] = useState();
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('title');
   const [page, setPage] = useState(0);
@@ -144,8 +146,8 @@ export default function CustomTable(props) {
     setOrderBy(property);
   };
 
-  const handleClick = (event, name) => {
-    // todo: make navigate to specific pool page /pools/:id
+  const handleClick = (event, address) => {
+    setRedirect(`/pool/${address}`);
   };
 
   const handleChangePage = (event, newPage) => {
@@ -161,7 +163,9 @@ export default function CustomTable(props) {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
-  return (
+  return redirect ? (
+    <Redirect to={redirect} />
+  ) : (
     <Box sx={{ width: '100%', 'margin-top': '10px' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
         <TableContainer>
@@ -185,9 +189,9 @@ export default function CustomTable(props) {
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.name)}
+                      onClick={(event) => handleClick(event, row.address)}
                       tabIndex={-1}
-                      key={row.name}
+                      key={row.address}
                     >
                       <TableCell padding='checkbox'>
                         {/*  todo: add in check mark if user is in pool */}
