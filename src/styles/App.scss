@@ -41,8 +41,29 @@
   border-radius: 5px;
   border: 1px solid rgba(0, 0, 0, 0.1);
 
+  .pull-right {
+    float: right;
+  }
+  Button {
+    margin-left: 5px;
+  }
+
+  a {
+    text-decoration: none;
+  }
+
   p {
     text-align: center;
+  }
+
+  .bracket-page {
+    margin: auto;
+    padding-top: 10px;
+
+    button {
+      text-align: center;
+      width: 100%;
+    }
   }
 
   .create-section {
