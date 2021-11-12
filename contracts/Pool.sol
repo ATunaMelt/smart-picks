@@ -2,24 +2,10 @@
 pragma solidity >=0.8.0 <0.9.0;
 
 /*
-Pool contract lifecycle
-  Pool is created, with its first entry included from the creator.
-    Pool constructor needs several params:
-      How many entrants?
-      What is the buy in price?
-      Winner take all set (This can be changed later)
-    Pool contract needs several functions
-      Recieve Additional submissions
-        params will include:
-          New submission fee
-          New submission bracket
-      a final submission should close further submissions
-    Pool contract's final function is to payout the winner
-      the winner will have the greatest amount of points
-      Points will be determined when the chainlink keep calls the tally function
-      the tally function will get the winners of each of the games, and preform
-      the totalPoints() function on each user and then return the winning user, along with the payout transaction.
- */
+Still needed:
+    1. Additional functionality for tiered payouts, currently winner take all
+    2. Chainlink keeper should be calling close pool function, it should be the only one able
+*/
 
 /**
  * @title Pool
@@ -29,11 +15,10 @@ contract Pool {
     string public poolName;
     uint256 public entryFee;
     uint256 public maximumPlayers;
-    uint256 points;
     uint256 public etherInPot;
-    address winner;
-    // Uints are initialized to 0 automatically
     uint256 public numberOfPlayers;
+
+    address winner;
     bool addressHasEntered;
 
     struct BracketEntry {
@@ -63,23 +48,6 @@ contract Pool {
         etherInPot = 0;
     }
 
-    /**
-     * @dev Store value in variable
-     * @param _num value to setMaximumPlayers
-     */
-
-    function setMaximumPlayers(uint256 _num) public {
-        maximumPlayers = _num;
-    }
-
-    function getNumberEntries() public view returns (uint256) {
-        return numberOfPlayers;
-    }
-
-    function getWinnerAddress() public view returns (address) {
-        return winner;
-    }
-
     function enterPool(
         string memory _teamName,
         string[] memory _roundOneWinners,
@@ -89,7 +57,6 @@ contract Pool {
         string[] memory _roundFiveWinners,
         string memory _overallWinner
     ) public payable returns (address) {
-        // should protect against reentrancy
         require(
             playersBracketMapping[msg.sender].hasEntered != true,
             "Sender has already entered bracket"
@@ -174,18 +141,21 @@ contract Pool {
                 1,
                 currentScoreForPlayer
             );
+            // ~~~ Round Three ~~~~
             currentScoreForPlayer = totalRound(
                 playersBracketStruct.roundThreeWinners,
                 _roundThreeWinners,
                 1,
                 currentScoreForPlayer
             );
+            // ~~~ Round Four ~~~~
             currentScoreForPlayer = totalRound(
                 playersBracketStruct.roundFourWinners,
                 _roundFourWinners,
                 1,
                 currentScoreForPlayer
             );
+            // ~~~ Round Five ~~~~
             currentScoreForPlayer = totalRound(
                 playersBracketStruct.roundFiveWinners,
                 _roundFiveWinners,
@@ -207,11 +177,24 @@ contract Pool {
                 winnerAddress = playersBracketStruct.sender;
             }
         }
-
-        // bool sent = payable(winnerAddress).send(entryFee);
         bool sent = payWinner(winnerAddress);
         require(sent, "Failed to send Ether");
         winner = winnerAddress;
+    }
+
+    // Helper Functions
+    function compareStrings(string memory a, string memory b)
+        public
+        pure
+        returns (bool)
+    {
+        return (keccak256(abi.encodePacked((a))) ==
+            keccak256(abi.encodePacked((b))));
+    }
+
+    function payWinner(address winnerAddress) internal returns (bool) {
+        bool sent = payable(winnerAddress).send(etherInPot);
+        return sent;
     }
 
     function totalRound(
@@ -228,30 +211,38 @@ contract Pool {
         return currentScoreForPlayer;
     }
 
-    /**
-     * @dev Return value
-     * @return value of 'numberOfPlayers'
-     */
-    function retrieveRules() public view returns (uint256, uint256) {
-        return (maximumPlayers, entryFee);
+    // Getter functions
+    function getNumberEntries() public view returns (uint256) {
+        return numberOfPlayers;
     }
 
-    function get(address _addr) public view returns (BracketEntry memory) {
+    function getWinnerAddress() public view returns (address) {
+        return winner;
+    }
+
+    function getPlayersEntry(address _addr)
+        public
+        view
+        returns (BracketEntry memory)
+    {
         return playersBracketMapping[_addr];
     }
 
-    function compareStrings(string memory a, string memory b)
+    function retrieveRules()
         public
-        pure
-        returns (bool)
+        view
+        returns (
+            string memory _poolName,
+            uint256 _entryFee,
+            uint256 _maximumPlayers,
+            uint256 _etherInPot,
+            uint256 _numberOfPlayers
+        )
     {
-        return (keccak256(abi.encodePacked((a))) ==
-            keccak256(abi.encodePacked((b))));
-    }
-
-    function payWinner(address winnerAddress) internal returns (bool) {
-        bool sent = payable(winnerAddress).send(etherInPot);
-
-        return sent;
+        _poolName = poolName;
+        _entryFee = entryFee;
+        _maximumPlayers = maximumPlayers;
+        _etherInPot = etherInPot;
+        _numberOfPlayers = numberOfPlayers;
     }
 }

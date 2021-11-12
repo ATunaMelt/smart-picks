@@ -3,6 +3,7 @@ import Header from './components/header.js';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import BracketPage from './pages/brackets';
 import CreatePool from './pages/createPool';
+import ViewPools from './pages/viewPools';
 import CreateBracket from './pages/createBracket';
 
 function App() {
@@ -24,9 +25,7 @@ function App() {
           <Route path='/about'>
             <div> About </div>
           </Route>
-          <Route path='/'>
-            <div> Home </div>
-          </Route>
+          <Route path='/' component={ViewPools} />
         </Switch>
       </div>
     </Router>
