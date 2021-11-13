@@ -5,6 +5,7 @@ import BracketPage from './pages/brackets';
 import CreatePool from './pages/createPool';
 import ViewPools from './pages/viewPools';
 import JoinPool from './pages/joinPool';
+import CreateBracket from './pages/createBracket';
 
 function App() {
   return (
@@ -18,6 +19,10 @@ function App() {
           <Route path='/brackets/new'>
             <div>New Bracket </div>
           </Route>
+          <Route path='/pool/:id'>
+            <div>Join Pool </div>
+          </Route>
+          <Route path='/brackets/new' component={CreateBracket} />
           <Route path='/brackets/:id'>
             <div> View Bracket </div>
           </Route>

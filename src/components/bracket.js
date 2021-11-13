@@ -291,6 +291,21 @@ export default function Bracket(props) {
     setRounds(renderTree(root, refreshBracket));
   }
 
+  function getRoundWinners() {
+    if (rounds.length === 0) return;
+    // rounds is 11
+    const roundOne = [...rounds[1].slice(0,-1), ...rounds[9].slice(0,-1)].map((el) => el?.props?.teamObj?.team);
+    const roundTwo = [...rounds[2].slice(0,-1), ...rounds[8].slice(0,-1)].map((el) => el?.props?.teamObj?.team);
+    const roundThree = [...rounds[3].slice(0,-1), ...rounds[7].slice(0,-1)].map((el) => el?.props?.teamObj?.team);
+    const roundFour = [...rounds[4].slice(0,-1), ...rounds[6].slice(0,-1)].map((el) => el?.props?.teamObj?.team);
+    const roundFive = [rounds[5][0], rounds[5][2]].map((el) => el?.props?.teamObj?.team);
+    const overall = rounds[5][1]?.props?.teamObj?.team;
+
+    props.setWinners(roundOne, roundTwo, roundThree, roundFour, roundFive, overall);
+
+  }
+  getRoundWinners();
+
   return (
     <div className='tournament'>
       {rounds.map((round, i) => {
@@ -300,3 +315,7 @@ export default function Bracket(props) {
     </div>
   );
 }
+
+Bracket.propTypes = {
+  setWinners: PropTypes.func.isRequired,
+};
