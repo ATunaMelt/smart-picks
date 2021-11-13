@@ -50,6 +50,35 @@
     display: block;
   }
 
+  #bracket-dropdown {
+    min-width: 150px;
+  }
+
+  .form {
+    margin-top: 0;
+    vertical-align: middle;
+  }
+  .about p {
+    text-align: left;
+  }
+  h6 {
+    margin-top: 10px;
+  }
+
+  .half {
+    width: 50%;
+    display: inline-block;
+  }
+
+  .pool-details {
+    width: 60vw;
+    padding: 5px;
+    border: 1px solid $secondary-color;
+    background-color: rgba($secondary-highlight-color, 0.2);
+    border-radius: 5px;
+    margin-top: 10px;
+  }
+
   a {
     text-decoration: none;
   }

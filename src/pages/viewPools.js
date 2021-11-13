@@ -10,7 +10,7 @@ import { Button } from '@mui/material';
 
 const filterPools = (pools, search) => {
   if (!search || search.length === 0) return pools;
-  return pools.filter((pool) => pool.name.includes(search));
+  return pools.filter((pool) => pool.title.includes(search));
 };
 
 export default function ViewPools() {
