@@ -21,7 +21,7 @@ module.exports = {
   networks: {
     kovan: {
       url: `https://eth-kovan.alchemyapi.io/v2/${process.env.ALCHEMY_API_KEY}`,
-      accounts: [`0x${process.env.KOVAN_PRIVATE_KEY}`],
-    },
-  },
+      accounts: [`0x${process.env.KOVAN_PRIVATE_KEY}`]
+    }
+  }
 };

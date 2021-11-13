@@ -63,7 +63,7 @@ describe('Pool', function () {
             'Syracuse',
             'West Virginia',
             'Rutgers',
-            'Houston',
+            'Houston'
           ],
           [
             'Gonzaga',
@@ -81,7 +81,7 @@ describe('Pool', function () {
             'Loyola Chicago',
             'Oregon St.',
             'Syracuse',
-            'Houston',
+            'Houston'
           ],
           [
             'Gonzaga',
@@ -91,7 +91,7 @@ describe('Pool', function () {
             'Baylor',
             'Arkansas',
             'Oregon St.',
-            'Houston',
+            'Houston'
           ],
           ['Gonzaga', 'UCLA', 'Arkansas', 'Houston'],
           ['Gonzaga', 'Houston'],
@@ -124,7 +124,7 @@ describe('Pool', function () {
             'Loyola Chicago',
             'Oregon St.',
             'Syracuse',
-            'Houston',
+            'Houston'
           ],
           [
             'Gonzaga',
@@ -134,7 +134,7 @@ describe('Pool', function () {
             'Baylor',
             'Arkansas',
             'Oregon St.',
-            'Houston',
+            'Houston'
           ],
           ['Gonzaga', 'UCLA', 'Arkansas', 'Houston'],
           ['Gonzaga', 'Houston'],
@@ -181,7 +181,7 @@ describe('Pool', function () {
           'Syracuse',
           'West Virginia',
           'Rutgers',
-          'Houston',
+          'Houston'
         ],
         [
           'Gonzaga',
@@ -199,7 +199,7 @@ describe('Pool', function () {
           'Loyola Chicago',
           'Oregon St.',
           'Syracuse',
-          'Houston',
+          'Houston'
         ],
         [
           'Gonzaga',
@@ -209,7 +209,7 @@ describe('Pool', function () {
           'Baylor',
           'Arkansas',
           'Oregon St.',
-          'Houston',
+          'Houston'
         ],
         ['Gonzaga', 'UCLA', 'Arkansas', 'Houston'],
         ['Gonzaga', 'Houston'],
@@ -260,7 +260,7 @@ describe('Pool', function () {
           'Syracuse',
           'West Virginia',
           'Rutgers',
-          'Houston',
+          'Houston'
         ],
         [
           'Gonzaga',
@@ -278,7 +278,7 @@ describe('Pool', function () {
           'Loyola Chicago',
           'Oregon St.',
           'Syracuse',
-          'Houston',
+          'Houston'
         ],
         [
           'Gonzaga',
@@ -288,7 +288,7 @@ describe('Pool', function () {
           'Baylor',
           'Arkansas',
           'Oregon St.',
-          'Houston',
+          'Houston'
         ],
         ['Gonzaga', 'UCLA', 'Baylor', 'Houston'],
         ['Gonzaga', 'Baylor'],
@@ -339,7 +339,7 @@ describe('Pool', function () {
             'Syracuse',
             'West Virginia',
             'Rutgers',
-            'Houston',
+            'Houston'
           ],
           [
             'Gonzaga',
@@ -357,7 +357,7 @@ describe('Pool', function () {
             'Loyola Chicago',
             'Oregon St.',
             'Syracuse',
-            'Houston',
+            'Houston'
           ],
           [
             'Gonzaga',
@@ -367,7 +367,7 @@ describe('Pool', function () {
             'Baylor',
             'Arkansas',
             'Oregon St.',
-            'Houston',
+            'Houston'
           ],
           ['Gonzaga', 'UCLA', 'Baylor', 'Houston'],
           ['Gonzaga', 'Baylor'],
@@ -413,7 +413,7 @@ describe('Pool', function () {
         'Syracuse',
         'West Virginia',
         'Rutgers',
-        'Houston',
+        'Houston'
       ],
       [
         'Gonzaga',
@@ -431,7 +431,7 @@ describe('Pool', function () {
         'Loyola Chicago',
         'Oregon St.',
         'Syracuse',
-        'Houston',
+        'Houston'
       ],
       [
         'Gonzaga',
@@ -441,7 +441,7 @@ describe('Pool', function () {
         'Baylor',
         'Arkansas',
         'Oregon St.',
-        'Houston',
+        'Houston'
       ],
       ['Gonzaga', 'UCLA', 'Baylor', 'Houston'],
       ['Gonzaga', 'Baylor'],

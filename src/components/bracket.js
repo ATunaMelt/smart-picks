@@ -20,7 +20,7 @@ const starterGames = {
     'Oregon',
     'VCU',
     'Iowa',
-    'G. Canyon',
+    'G. Canyon'
   ],
   east: [
     'Michigan',
@@ -38,7 +38,7 @@ const starterGames = {
     'UConn',
     'Maryland',
     'Alabama',
-    'Iona',
+    'Iona'
   ],
   south: [
     'Baylor',
@@ -56,7 +56,7 @@ const starterGames = {
     'Florida',
     'Virginia Tech',
     'Ohio St',
-    'Oral Roberts',
+    'Oral Roberts'
   ],
   midwest: [
     'Illinois',
@@ -74,8 +74,8 @@ const starterGames = {
     'Clemson',
     'Rutgers',
     'Houston',
-    'Cleveland St',
-  ],
+    'Cleveland St'
+  ]
 };
 
 const getSpacer = (classes) => <li className={classes}>&nbsp;</li>;
@@ -120,7 +120,7 @@ BracketItem.propTypes = {
   teamObj: PropTypes.object.isRequired,
   click: PropTypes.func.isRequired,
   classes: PropTypes.string.isRequired,
-  withSpacer: PropTypes.bool,
+  withSpacer: PropTypes.bool
 };
 
 class Node {
@@ -280,7 +280,7 @@ export default function Bracket(props) {
     }
     buildRight(holder, 1, true, [
       ...starterGames.south,
-      ...starterGames.midwest,
+      ...starterGames.midwest
     ]);
 
     if (rounds.length === 0) refreshBracket(root);
@@ -294,15 +294,33 @@ export default function Bracket(props) {
   function getRoundWinners() {
     if (rounds.length === 0) return;
     // rounds is 11
-    const roundOne = [...rounds[1].slice(0,-1), ...rounds[9].slice(0,-1)].map((el) => el?.props?.teamObj?.team);
-    const roundTwo = [...rounds[2].slice(0,-1), ...rounds[8].slice(0,-1)].map((el) => el?.props?.teamObj?.team);
-    const roundThree = [...rounds[3].slice(0,-1), ...rounds[7].slice(0,-1)].map((el) => el?.props?.teamObj?.team);
-    const roundFour = [...rounds[4].slice(0,-1), ...rounds[6].slice(0,-1)].map((el) => el?.props?.teamObj?.team);
-    const roundFive = [rounds[5][0], rounds[5][2]].map((el) => el?.props?.teamObj?.team);
+    const roundOne = [...rounds[1].slice(0, -1), ...rounds[9].slice(0, -1)].map(
+      (el) => el?.props?.teamObj?.team
+    );
+    const roundTwo = [...rounds[2].slice(0, -1), ...rounds[8].slice(0, -1)].map(
+      (el) => el?.props?.teamObj?.team
+    );
+    const roundThree = [
+      ...rounds[3].slice(0, -1),
+      ...rounds[7].slice(0, -1)
+    ].map((el) => el?.props?.teamObj?.team);
+    const roundFour = [
+      ...rounds[4].slice(0, -1),
+      ...rounds[6].slice(0, -1)
+    ].map((el) => el?.props?.teamObj?.team);
+    const roundFive = [rounds[5][0], rounds[5][2]].map(
+      (el) => el?.props?.teamObj?.team
+    );
     const overall = rounds[5][1]?.props?.teamObj?.team;
 
-    props.setWinners(roundOne, roundTwo, roundThree, roundFour, roundFive, overall);
-
+    props.setWinners(
+      roundOne,
+      roundTwo,
+      roundThree,
+      roundFour,
+      roundFive,
+      overall
+    );
   }
   getRoundWinners();
 
@@ -317,5 +335,5 @@ export default function Bracket(props) {
 }
 
 Bracket.propTypes = {
-  setWinners: PropTypes.func.isRequired,
+  setWinners: PropTypes.func.isRequired
 };
