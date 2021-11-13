@@ -17,7 +17,7 @@ export default function ViewPools() {
   const { Moralis } = useMoralis();
   const factoryOptions = {
     abi: factoryABI,
-    contractAddress: poolFactoryAddress,
+    contractAddress: poolFactoryAddress
   };
   const poolOptions = { abi: poolABI };
 
@@ -30,7 +30,7 @@ export default function ViewPools() {
     await Moralis.enableWeb3();
     let tx = await Moralis.executeFunction({
       functionName: 'getAllPools',
-      ...factoryOptions,
+      ...factoryOptions
     });
 
     if (tx[2].length !== poolAddresses.length) {
@@ -38,7 +38,7 @@ export default function ViewPools() {
         let rules = await Moralis.executeFunction({
           functionName: 'retrieveRules',
           contractAddress: address,
-          ...poolOptions,
+          ...poolOptions
         });
         return {
           title: rules._poolName,
@@ -46,7 +46,7 @@ export default function ViewPools() {
           entrants: rules._numberOfPlayers,
           maxPlayers: rules._maximumPlayers,
           etherInPot: rules._etherInPot,
-          address: address,
+          address: address
         };
       });
       poolDetails = await Promise.all(poolDetails);

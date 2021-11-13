@@ -11,19 +11,19 @@ import {
   TableRow,
   TableSortLabel,
   Paper,
-  Table,
+  Table
 } from '@mui/material';
 import { StylesProvider } from '@material-ui/core/styles';
 import { visuallyHidden } from '@mui/utils';
 import {
   POOL_CONSTANTS,
-  BRACKET_CONSTANTS,
+  BRACKET_CONSTANTS
 } from '../constants/table-constants.js';
 import '../styles/App.scss';
 
 // example pool table data
 const poolData = [
-  { title: 'awesome pool', price: '2', entrants: '1', participants: '50' },
+  { title: 'awesome pool', price: '2', entrants: '1', participants: '50' }
 ];
 
 //example bracket table data
@@ -127,7 +127,7 @@ EnhancedTableHead.propTypes = {
   onRequestSort: PropTypes.func.isRequired,
   order: PropTypes.oneOf(['asc', 'desc']).isRequired,
   orderBy: PropTypes.string.isRequired,
-  type: PropTypes.oneOf(['pool', 'bracket']).isRequired,
+  type: PropTypes.oneOf(['pool', 'bracket']).isRequired
 };
 
 export default function CustomTable(props) {
@@ -209,7 +209,7 @@ export default function CustomTable(props) {
               {emptyRows > 0 && (
                 <TableRow
                   style={{
-                    height: 53 * emptyRows,
+                    height: 53 * emptyRows
                   }}
                 >
                   <TableCell colSpan={6} />
@@ -234,5 +234,5 @@ export default function CustomTable(props) {
 
 CustomTable.propTypes = {
   type: PropTypes.oneOf(['pool', 'bracket']).isRequired,
-  data: PropTypes.array.isRequired,
+  data: PropTypes.array.isRequired
 };

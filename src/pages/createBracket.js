@@ -9,14 +9,21 @@ export default function CreateBracket() {
   const [isSaved, setIsSaved] = useState(false);
   const [bracket, setBracket] = useState({});
 
-  const setWinners = (roundOne, roundTwo, roundThree, roundFour, roundFive, overall) => {
+  const setWinners = (
+    roundOne,
+    roundTwo,
+    roundThree,
+    roundFour,
+    roundFive,
+    overall
+  ) => {
     let isReady = true;
-    if(!roundOne.every((item) => item)) isReady = false;
-    if(!roundTwo.every((item) => item)) isReady = false;
-    if(!roundThree.every((item) => item)) isReady = false;
-    if(!roundFour.every((item) => item)) isReady = false;
-    if(!roundFive.every((item) => item)) isReady = false;
-    if(!overall) isReady = false;
+    if (!roundOne.every((item) => item)) isReady = false;
+    if (!roundTwo.every((item) => item)) isReady = false;
+    if (!roundThree.every((item) => item)) isReady = false;
+    if (!roundFour.every((item) => item)) isReady = false;
+    if (!roundFive.every((item) => item)) isReady = false;
+    if (!overall) isReady = false;
     if (isReady !== isValid) setIsValid(isReady);
     if (isReady) {
       bracket.roundOne = roundOne;
@@ -30,32 +37,33 @@ export default function CreateBracket() {
 
   const onSave = () => {
     if (isValid) {
-      const allBrackets = JSON.parse(window.localStorage.getItem('brackets')) || [];
+      const allBrackets =
+        JSON.parse(window.localStorage.getItem('brackets')) || [];
       allBrackets.push(bracket);
       window.localStorage.setItem('brackets', JSON.stringify(allBrackets));
       setIsSaved(true);
     }
-  }
+  };
 
   const handleInputChange = (event) => {
     bracket.title = event.target.value;
   };
 
-  return isSaved ? <Redirect to={'/brackets'} /> : (
+  return isSaved ? (
+    <Redirect to={'/brackets'} />
+  ) : (
     <div className='page'>
-    <Title title='Create Bracket' />
-    <div className='bracket-page'>
-      <div className='input-group'>
-        <label for='name'>Enter name for the bracket: </label>
-          <Input
-            name='name'
-            type='string'
-            onChange={handleInputChange}
-          />
+      <Title title='Create Bracket' />
+      <div className='bracket-page'>
+        <div className='input-group'>
+          <label for='name'>Enter name for the bracket: </label>
+          <Input name='name' type='string' onChange={handleInputChange} />
         </div>
-        <Brackets setWinners={setWinners}/>
-        <Button variant='outlined' disabled={!isValid} onClick={onSave}>Save</Button>
+        <Brackets setWinners={setWinners} />
+        <Button variant='outlined' disabled={!isValid} onClick={onSave}>
+          Save
+        </Button>
       </div>
     </div>
-  )
+  );
 }

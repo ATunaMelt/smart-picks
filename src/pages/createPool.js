@@ -19,9 +19,9 @@ export default function CreatePool() {
       params: {
         _poolName: poolName,
         _entryFee: entryFee,
-        _maximumPlayers: maximumPlayers,
+        _maximumPlayers: maximumPlayers
       },
-      ...options,
+      ...options
     });
   };
   const handleInputChange = (event, contractInput) => {
