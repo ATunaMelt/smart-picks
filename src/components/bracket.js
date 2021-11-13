@@ -158,16 +158,20 @@ class Node {
  * @param   {<number>} roundNumber number of the current round
  * @return  {<array>}          array of nodes for current round
  */
-function buildRoundLeft(roundArr, roundNumber) {
+function buildRoundLeft(roundArr, roundNumber, teamArr) {
   let currNode;
 
   return roundArr.reduce((prev, team, i) => {
     const isEven = i % 2 === 0;
     isEven
-      ? (currNode = new Node(null, roundNumber, 'left'))
+      ? (currNode = new Node(
+        teamArr ? teamArr.shift() : null,
+        roundNumber,
+        'left'))
       : prev.push(currNode);
     currNode[isEven ? 'upperChild' : 'lowerChild'] = roundArr[i];
     roundArr[i].parent = currNode;
+    if (teamArr && roundArr[i].team === currNode.team) roundArr[i].win = true;
     return prev;
   }, []);
 }
@@ -180,22 +184,24 @@ function buildRoundLeft(roundArr, roundNumber) {
  * @param   {<array>}  seed   array of seed nodes
  * @return  {<array>}          array of nodes for current round
  */
-function buildRight(parentArr, roundNumber, isSeed, seed) {
+function buildRight(parentArr, roundNumber, seed) {
   let counter = 0;
 
   return parentArr.reduce((prev, parent) => {
     parent.upperChild = new Node(
-      isSeed ? seed[counter++] : null,
+      seed ? seed[counter++] : null,
       roundNumber,
       'right',
       parent
     );
     parent.lowerChild = new Node(
-      isSeed ? seed[counter++] : null,
+      seed ? seed[counter++] : null,
       roundNumber,
       'right',
       parent
     );
+    if(parent.team && parent.team === parent.upperChild.team) parent.upperChild.win = true;
+    if(parent.team && parent.team === parent.lowerChild.team) parent.lowerChild.win = true;
     return [...prev, parent.upperChild, parent.lowerChild];
   }, []);
 }
@@ -259,26 +265,60 @@ function renderTree(root, refreshBracket) {
 
 export default function Bracket(props) {
   let [rounds, setRounds] = useState([]);
+  const { selectedWinners } = props;
+
   let rootNode = buildTree();
 
   function buildTree() {
+
     let holder = [...starterGames.west, ...starterGames.east].map(
       (team) => new Node(team, 1, 'left')
     );
-    for (let i = 2; i < 7; i++) {
-      holder = buildRoundLeft(holder, i);
+    const leftRounds = [];
+    const rightRounds = [];
+    const winner = selectedWinners ? selectedWinners.winner : null;
+
+    if(selectedWinners) {
+      leftRounds.push(selectedWinners.roundOne.slice(0,16));
+      rightRounds.unshift(selectedWinners.roundOne.slice(16));
+      leftRounds.push(selectedWinners.roundTwo.slice(0,8));
+      rightRounds.unshift(selectedWinners.roundTwo.slice(8));
+      leftRounds.push(selectedWinners.roundThree.slice(0,4));
+      rightRounds.unshift(selectedWinners.roundThree.slice(4));
+      leftRounds.push(selectedWinners.roundFour.slice(0,2));
+      rightRounds.unshift(selectedWinners.roundFour.slice(2));
+      leftRounds.push(selectedWinners.roundFive.slice(0,1));
+      rightRounds.unshift(selectedWinners.roundFive.slice(1));
     }
 
-    let root = new Node(null, 7, 'center');
+    for (let i = 2; i < 7; i++) {
+      holder = buildRoundLeft(
+        holder,
+        i,
+        leftRounds.length > 0 ? leftRounds[i-2] : null
+      );
+    }
+
+    let root = new Node(winner, 7, 'center');
     root.upperChild = holder[0];
     root.upperChild.parent = root;
-    root.lowerChild = new Node(null, 6, 'right', root);
+    root.lowerChild = new Node(
+      rightRounds.length > 0 ? rightRounds.shift()[0] : null,
+      6,
+      'right',
+      root);
+    if(root.lowerChild.team && root.lowerChild.team === root.team) root.lowerChild.win = true;
+    if(root.upperChild.team && root.upperChild.team === root.team) root.upperChild.win = true;
     holder = [root.lowerChild];
 
     for (let j = 5; j >= 2; j--) {
-      holder = buildRight(holder, j, false, []);
+      holder = buildRight(
+        holder,
+        j,
+        rightRounds.length > 0 ? rightRounds.shift() : null
+      );
     }
-    buildRight(holder, 1, true, [
+    buildRight(holder, 1, [
       ...starterGames.south,
       ...starterGames.midwest,
     ]);
@@ -318,4 +358,5 @@ export default function Bracket(props) {
 
 Bracket.propTypes = {
   setWinners: PropTypes.func.isRequired,
+  selectedWinners: PropTypes.object,
 };
