@@ -66,7 +66,8 @@ export default function Header() {
               }}
             >
               {(isAuthenticating || isWeb3EnableLoading) && 'Loading'}
-              {(!isAuthenticated || !isWeb3EnableLoading) &&
+              {!isAuthenticated &&
+                !isWeb3EnableLoading &&
                 '🦊 Login with Metamask'}
               {isAuthenticated && '  Logout'}
             </button>

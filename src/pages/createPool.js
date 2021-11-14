@@ -1,5 +1,5 @@
 import { Web3Provider } from '@ethersproject/providers';
-import { Input, ButtonS, Button } from '@mui/material';
+import { Input, Button } from '@mui/material';
 import { useState } from 'react';
 import { useMoralis } from 'react-moralis';
 import Title from '../components/title';
