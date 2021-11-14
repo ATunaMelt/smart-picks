@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { NavLink, Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
   Box,
@@ -21,14 +21,6 @@ import {
 } from '../constants/table-constants.js';
 import '../styles/App.scss';
 
-// example pool table data
-const poolData = [
-  { title: 'awesome pool', price: '2', entrants: '1', participants: '50' }
-];
-
-//example bracket table data
-const bracketData = [{ title: 'awesome bracket', winner: 'me' }];
-
 /**
  * Maps smart contract data into rows for the table
  * @param   {<string>} type pool || bracket
@@ -42,6 +34,7 @@ function createData(type, data) {
     formattedData.entrants += `/${data.maxPlayers}`;
   } else {
     BRACKET_CONSTANTS.forEach((col) => (formattedData[col.id] = data[col.id]));
+    formattedData.id = data.id;
   }
 
   return formattedData;
@@ -146,8 +139,13 @@ export default function CustomTable(props) {
     setOrderBy(property);
   };
 
-  const handleClick = (event, address) => {
-    setRedirect(`/pool/${address}`);
+  const handleClick = (event, row) => {
+    if (type === 'pool') {
+      setRedirect(`/pool/${row.address}`);
+    } else {
+      console.log(row);
+      setRedirect(`/brackets/${row.id}`);
+    }
   };
 
   const handleChangePage = (event, newPage) => {
@@ -189,7 +187,7 @@ export default function CustomTable(props) {
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.address)}
+                      onClick={(event) => handleClick(event, row)}
                       tabIndex={-1}
                       key={row.address}
                     >

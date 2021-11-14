@@ -9,7 +9,7 @@ const filterBrackets = (brackets, search) => {
   return brackets.filter((bracket) => bracket.title.includes(search));
 };
 
-export default function BracketPage() {
+export default function ViewBrackets() {
   const [searchName, setSearchName] = useState('');
   const allBrackets = JSON.parse(window.localStorage.getItem('brackets')) || [];
   let userBrackets = filterBrackets(allBrackets, searchName);

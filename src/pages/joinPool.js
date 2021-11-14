@@ -1,35 +1,28 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import CustomTable from '../components/table.js';
 import Title from '../components/title.js';
 import {
-  TextField,
   MenuItem,
   Select,
   Typography,
-  InputLabel,
   Input,
   FormControl
 } from '@mui/material';
 import { useMoralis } from 'react-moralis';
 import { abi as poolABI } from '../constants/Pool.json';
-import { Button } from '@mui/material';
-import Bracket from '../components/bracket.js';
 import BracketContainer from '../containers/bracketContainer';
 
 export default function JoinPool() {
+  const { Moralis } = useMoralis();
+  const params = useParams();
+  const poolOptions = { abi: poolABI, contractAddress: params.id };
+
   const [pool, setPool] = useState({});
   const [selectedBracket, setSelectedBracket] = useState('');
   const [selectedBracketName, setSelectedBracketName] = useState({});
-
-  const { Moralis } = useMoralis();
-  const params = useParams();
-  let pageTitle = '';
-  const [bracket, setBracket] = useState({});
-  const [isValid, setIsValid] = useState(false);
   const [teamName, setTeamName] = useState('');
+
   const allBrackets = JSON.parse(window.localStorage.getItem('brackets')) || [];
-  const poolOptions = { abi: poolABI, contractAddress: params.id };
 
   const retrievePoolInformation = async (address) => {
     await Moralis.enableWeb3();
@@ -39,11 +32,6 @@ export default function JoinPool() {
       contractAddress: params.id,
       ...poolOptions
     });
-
-    pageTitle =
-      rules._poolName.length > 30
-        ? `${rules._poolName.substring(0, 30)}...`
-        : rules._poolName;
 
     setPool({
       title: rules._poolName,
