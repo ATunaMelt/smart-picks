@@ -86,7 +86,6 @@ export default function JoinPool() {
 
   const onSave = async (bracket) => {
     let _msgValue = await entryFeeToWei(pool.price);
-    console.log(_msgValue);
     let tx = await Moralis.executeFunction({
       functionName: 'enterPool',
       params: {

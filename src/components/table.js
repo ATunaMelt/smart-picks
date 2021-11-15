@@ -144,7 +144,6 @@ export default function CustomTable(props) {
     if (type === 'pool') {
       setRedirect(`/pool/${row.address}`);
     } else {
-      console.log(row);
       setRedirect(`/brackets/${row.id}`);
     }
   };
