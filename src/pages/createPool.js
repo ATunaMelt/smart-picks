@@ -1,23 +1,9 @@
-import { Web3Provider } from '@ethersproject/providers';
 import { Input, Button, InputAdornment } from '@mui/material';
 import { useState } from 'react';
 import { useMoralis } from 'react-moralis';
 import Title from '../components/title';
 import { abi } from '../constants/PoolFactory.json';
 import poolFactoryAddress from '../constants/poolFactoryAddress.js';
-import {
-  aggregatorV3InterfaceABI,
-  aggregatorV3InterfaceAddress
-} from '../constants/aggregatorV3Interface';
-
-const Web3 = require('web3'); // for nodejs only
-const web3 = new Web3(
-  `https://eth-kovan.alchemyapi.io/v2/${process.env.REACT_APP_ALCHEMY_API_KEY}`
-);
-const priceFeed = new web3.eth.Contract(
-  aggregatorV3InterfaceABI,
-  aggregatorV3InterfaceAddress
-);
 
 export default function CreatePool() {
   const { Moralis } = useMoralis();
@@ -25,15 +11,6 @@ export default function CreatePool() {
   const [entryFee, setEntryFee] = useState(1);
   const [maximumPlayers, setMaximumPlayers] = useState(2);
   const [poolName, setPoolName] = useState('');
-
-  const getLastPrice = () =>
-    priceFeed.methods
-      .latestRoundData()
-      .call()
-      .then((roundData) => {
-        // Do something with roundData
-        console.log('Latest Round Data', roundData);
-      });
 
   const createNewSmartContract = async (event) => {
     let tx = await Moralis.executeFunction({
@@ -98,9 +75,6 @@ export default function CreatePool() {
             startAdornment={<InputAdornment position='start'>$</InputAdornment>}
           />
         </div>
-        <Button variant='outlined' onClick={getLastPrice}>
-          {'Update price'}
-        </Button>
         <Button variant='outlined' onClick={createNewSmartContract}>
           {'Create Pool'}
         </Button>
