@@ -8,7 +8,7 @@ export default function Title(props) {
         {props.title}
       </Typography>
     </div>
-  )
+  );
 }
 
 Title.propTypes = {

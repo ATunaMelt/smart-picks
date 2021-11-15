@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
   Box,
@@ -10,23 +11,15 @@ import {
   TableRow,
   TableSortLabel,
   Paper,
-  Table,
+  Table
 } from '@mui/material';
 import { StylesProvider } from '@material-ui/core/styles';
 import { visuallyHidden } from '@mui/utils';
 import {
   POOL_CONSTANTS,
-  BRACKET_CONSTANTS,
+  BRACKET_CONSTANTS
 } from '../constants/table-constants.js';
 import '../styles/App.scss';
-
-// example pool table data
-const poolData = [
-  { title: 'awesome pool', price: '2', entrants: '1', participants: '50' },
-];
-
-//example bracket table data
-const bracketData = [{ title: 'awesome bracket', winner: 'me' }];
 
 /**
  * Maps smart contract data into rows for the table
@@ -39,8 +32,10 @@ function createData(type, data) {
   if (type === 'pool') {
     POOL_CONSTANTS.forEach((col) => (formattedData[col.id] = data[col.id]));
     formattedData.entrants += `/${data.maxPlayers}`;
+    formattedData.price = '$ ' + formattedData.price / 10 ** 8;
   } else {
     BRACKET_CONSTANTS.forEach((col) => (formattedData[col.id] = data[col.id]));
+    formattedData.id = data.id;
   }
 
   return formattedData;
@@ -126,10 +121,11 @@ EnhancedTableHead.propTypes = {
   onRequestSort: PropTypes.func.isRequired,
   order: PropTypes.oneOf(['asc', 'desc']).isRequired,
   orderBy: PropTypes.string.isRequired,
-  type: PropTypes.oneOf(['pool', 'bracket']).isRequired,
+  type: PropTypes.oneOf(['pool', 'bracket']).isRequired
 };
 
 export default function CustomTable(props) {
+  const [redirect, setRedirect] = useState();
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('title');
   const [page, setPage] = useState(0);
@@ -144,8 +140,12 @@ export default function CustomTable(props) {
     setOrderBy(property);
   };
 
-  const handleClick = (event, name) => {
-    // todo: make navigate to specific pool page /pools/:id
+  const handleClick = (event, row) => {
+    if (type === 'pool') {
+      setRedirect(`/pool/${row.address}`);
+    } else {
+      setRedirect(`/brackets/${row.id}`);
+    }
   };
 
   const handleChangePage = (event, newPage) => {
@@ -161,7 +161,9 @@ export default function CustomTable(props) {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
-  return (
+  return redirect ? (
+    <Redirect to={redirect} />
+  ) : (
     <Box sx={{ width: '100%', 'margin-top': '10px' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
         <TableContainer>
@@ -185,9 +187,9 @@ export default function CustomTable(props) {
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.name)}
+                      onClick={(event) => handleClick(event, row)}
                       tabIndex={-1}
-                      key={row.name}
+                      key={row.address}
                     >
                       <TableCell padding='checkbox'>
                         {/*  todo: add in check mark if user is in pool */}
@@ -205,7 +207,7 @@ export default function CustomTable(props) {
               {emptyRows > 0 && (
                 <TableRow
                   style={{
-                    height: 53 * emptyRows,
+                    height: 53 * emptyRows
                   }}
                 >
                   <TableCell colSpan={6} />
@@ -230,5 +232,5 @@ export default function CustomTable(props) {
 
 CustomTable.propTypes = {
   type: PropTypes.oneOf(['pool', 'bracket']).isRequired,
-  data: PropTypes.array.isRequired,
+  data: PropTypes.array.isRequired
 };

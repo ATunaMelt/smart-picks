@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import Button from '@mui/material/Button';
 import '../styles/bracket.scss';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const starterGames = {
   west: [
@@ -20,7 +20,7 @@ const starterGames = {
     'Oregon',
     'VCU',
     'Iowa',
-    'G. Canyon',
+    'G. Canyon'
   ],
   east: [
     'Michigan',
@@ -38,7 +38,7 @@ const starterGames = {
     'UConn',
     'Maryland',
     'Alabama',
-    'Iona',
+    'Iona'
   ],
   south: [
     'Baylor',
@@ -56,7 +56,7 @@ const starterGames = {
     'Florida',
     'Virginia Tech',
     'Ohio St',
-    'Oral Roberts',
+    'Oral Roberts'
   ],
   midwest: [
     'Illinois',
@@ -74,8 +74,8 @@ const starterGames = {
     'Clemson',
     'Rutgers',
     'Houston',
-    'Cleveland St',
-  ],
+    'Cleveland St'
+  ]
 };
 
 const getSpacer = (classes) => <li className={classes}>&nbsp;</li>;
@@ -85,8 +85,17 @@ function BracketItem(props) {
   const [variant, setVariant] = useState(
     teamObj.win ? 'contained' : 'outlined'
   );
-
   if (variant === 'contained' && !teamObj.win) setVariant('outlined');
+
+  useEffect(() => {
+    if (variant === 'contained' && !teamObj.win) {
+      setVariant('outlined');
+    }
+
+    if (variant === 'outlined' && teamObj.win) {
+      setVariant('contained');
+    }
+  });
 
   const buttonClick = () => {
     if (!teamObj.team || !teamObj.parent) return;
@@ -120,7 +129,7 @@ BracketItem.propTypes = {
   teamObj: PropTypes.object.isRequired,
   click: PropTypes.func.isRequired,
   classes: PropTypes.string.isRequired,
-  withSpacer: PropTypes.bool,
+  withSpacer: PropTypes.bool
 };
 
 class Node {
@@ -165,9 +174,10 @@ function buildRoundLeft(roundArr, roundNumber, teamArr) {
     const isEven = i % 2 === 0;
     isEven
       ? (currNode = new Node(
-        teamArr ? teamArr.shift() : null,
-        roundNumber,
-        'left'))
+          teamArr ? teamArr.shift() : null,
+          roundNumber,
+          'left'
+        ))
       : prev.push(currNode);
     currNode[isEven ? 'upperChild' : 'lowerChild'] = roundArr[i];
     roundArr[i].parent = currNode;
@@ -200,8 +210,10 @@ function buildRight(parentArr, roundNumber, seed) {
       'right',
       parent
     );
-    if(parent.team && parent.team === parent.upperChild.team) parent.upperChild.win = true;
-    if(parent.team && parent.team === parent.lowerChild.team) parent.lowerChild.win = true;
+    if (parent.team && parent.team === parent.upperChild.team)
+      parent.upperChild.win = true;
+    if (parent.team && parent.team === parent.lowerChild.team)
+      parent.lowerChild.win = true;
     return [...prev, parent.upperChild, parent.lowerChild];
   }, []);
 }
@@ -266,11 +278,18 @@ function renderTree(root, refreshBracket) {
 export default function Bracket(props) {
   let [rounds, setRounds] = useState([]);
   const { selectedWinners } = props;
+  const [selectedBracket, setSelectedBracket] = useState(props.selectedWinners);
+
+  useEffect(() => {
+    if (selectedBracket !== props.selectedWinners) {
+      setSelectedBracket(props.selectedWinners);
+      refreshBracket();
+    }
+  });
 
   let rootNode = buildTree();
 
   function buildTree() {
-
     let holder = [...starterGames.west, ...starterGames.east].map(
       (team) => new Node(team, 1, 'left')
     );
@@ -278,16 +297,16 @@ export default function Bracket(props) {
     const rightRounds = [];
     const winner = selectedWinners ? selectedWinners.winner : null;
 
-    if(selectedWinners) {
-      leftRounds.push(selectedWinners.roundOne.slice(0,16));
+    if (selectedWinners && selectedWinners.winner) {
+      leftRounds.push(selectedWinners.roundOne.slice(0, 16));
       rightRounds.unshift(selectedWinners.roundOne.slice(16));
-      leftRounds.push(selectedWinners.roundTwo.slice(0,8));
+      leftRounds.push(selectedWinners.roundTwo.slice(0, 8));
       rightRounds.unshift(selectedWinners.roundTwo.slice(8));
-      leftRounds.push(selectedWinners.roundThree.slice(0,4));
+      leftRounds.push(selectedWinners.roundThree.slice(0, 4));
       rightRounds.unshift(selectedWinners.roundThree.slice(4));
-      leftRounds.push(selectedWinners.roundFour.slice(0,2));
+      leftRounds.push(selectedWinners.roundFour.slice(0, 2));
       rightRounds.unshift(selectedWinners.roundFour.slice(2));
-      leftRounds.push(selectedWinners.roundFive.slice(0,1));
+      leftRounds.push(selectedWinners.roundFive.slice(0, 1));
       rightRounds.unshift(selectedWinners.roundFive.slice(1));
     }
 
@@ -295,7 +314,7 @@ export default function Bracket(props) {
       holder = buildRoundLeft(
         holder,
         i,
-        leftRounds.length > 0 ? leftRounds[i-2] : null
+        leftRounds.length > 0 ? leftRounds[i - 2] : null
       );
     }
 
@@ -306,9 +325,12 @@ export default function Bracket(props) {
       rightRounds.length > 0 ? rightRounds.shift()[0] : null,
       6,
       'right',
-      root);
-    if(root.lowerChild.team && root.lowerChild.team === root.team) root.lowerChild.win = true;
-    if(root.upperChild.team && root.upperChild.team === root.team) root.upperChild.win = true;
+      root
+    );
+    if (root.lowerChild.team && root.lowerChild.team === root.team)
+      root.lowerChild.win = true;
+    if (root.upperChild.team && root.upperChild.team === root.team)
+      root.upperChild.win = true;
     holder = [root.lowerChild];
 
     for (let j = 5; j >= 2; j--) {
@@ -318,10 +340,7 @@ export default function Bracket(props) {
         rightRounds.length > 0 ? rightRounds.shift() : null
       );
     }
-    buildRight(holder, 1, [
-      ...starterGames.south,
-      ...starterGames.midwest,
-    ]);
+    buildRight(holder, 1, [...starterGames.south, ...starterGames.midwest]);
 
     if (rounds.length === 0) refreshBracket(root);
     return root;
@@ -334,15 +353,33 @@ export default function Bracket(props) {
   function getRoundWinners() {
     if (rounds.length === 0) return;
     // rounds is 11
-    const roundOne = [...rounds[1].slice(0,-1), ...rounds[9].slice(0,-1)].map((el) => el?.props?.teamObj?.team);
-    const roundTwo = [...rounds[2].slice(0,-1), ...rounds[8].slice(0,-1)].map((el) => el?.props?.teamObj?.team);
-    const roundThree = [...rounds[3].slice(0,-1), ...rounds[7].slice(0,-1)].map((el) => el?.props?.teamObj?.team);
-    const roundFour = [...rounds[4].slice(0,-1), ...rounds[6].slice(0,-1)].map((el) => el?.props?.teamObj?.team);
-    const roundFive = [rounds[5][0], rounds[5][2]].map((el) => el?.props?.teamObj?.team);
+    const roundOne = [...rounds[1].slice(0, -1), ...rounds[9].slice(0, -1)].map(
+      (el) => el?.props?.teamObj?.team
+    );
+    const roundTwo = [...rounds[2].slice(0, -1), ...rounds[8].slice(0, -1)].map(
+      (el) => el?.props?.teamObj?.team
+    );
+    const roundThree = [
+      ...rounds[3].slice(0, -1),
+      ...rounds[7].slice(0, -1)
+    ].map((el) => el?.props?.teamObj?.team);
+    const roundFour = [
+      ...rounds[4].slice(0, -1),
+      ...rounds[6].slice(0, -1)
+    ].map((el) => el?.props?.teamObj?.team);
+    const roundFive = [rounds[5][0], rounds[5][2]].map(
+      (el) => el?.props?.teamObj?.team
+    );
     const overall = rounds[5][1]?.props?.teamObj?.team;
 
-    props.setWinners(roundOne, roundTwo, roundThree, roundFour, roundFive, overall);
-
+    props.setWinners(
+      roundOne,
+      roundTwo,
+      roundThree,
+      roundFour,
+      roundFive,
+      overall
+    );
   }
   getRoundWinners();
 
@@ -358,5 +395,5 @@ export default function Bracket(props) {
 
 Bracket.propTypes = {
   setWinners: PropTypes.func.isRequired,
-  selectedWinners: PropTypes.object,
+  selectedWinners: PropTypes.object
 };
