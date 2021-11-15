@@ -6,6 +6,7 @@ Still needed:
     1. Additional functionality for tiered payouts, currently winner take all
     2. Chainlink keeper should be calling close pool function, it should be the only one able
 */
+import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
 
 /**
  * @title Pool
@@ -14,12 +15,15 @@ Still needed:
 contract Pool {
     string public poolName;
     uint256 public entryFee;
+    int256 public entryFeeInUSD;
     uint256 public maximumPlayers;
     uint256 public etherInPot;
     uint256 public numberOfPlayers;
 
-    address winner;
+    address public winner;
     bool addressHasEntered;
+
+    AggregatorV3Interface internal priceFeed;
 
     struct BracketEntry {
         string teamName;
@@ -33,19 +37,26 @@ contract Pool {
         bool hasEntered;
     }
 
-    mapping(address => BracketEntry) public playersBracketMapping;
-    mapping(uint256 => address) public playersAddressMapping;
-    mapping(uint256 => address) private playersTotalPoints;
+    mapping(address => BracketEntry) public addressToBracketMap;
+    mapping(uint256 => address) public uintToAddressMap;
+    mapping(uint256 => address) private playersScoreToAddressMap;
 
     constructor(
         string memory _poolName,
+        int256 _entryFeeInUSD,
         uint256 _entryFee,
         uint256 _maximumPlayers
     ) {
         poolName = _poolName;
+
+        entryFeeInUSD = _entryFeeInUSD;
+
         entryFee = _entryFee;
         maximumPlayers = _maximumPlayers;
         etherInPot = 0;
+        priceFeed = AggregatorV3Interface(
+            0x9326BFA02ADD2366b30bacB125260Af641031331
+        );
     }
 
     function enterPool(
@@ -58,9 +69,10 @@ contract Pool {
         string memory _overallWinner
     ) public payable returns (address) {
         require(
-            playersBracketMapping[msg.sender].hasEntered != true,
+            addressToBracketMap[msg.sender].hasEntered != true,
             "Sender has already entered bracket"
         );
+        // require(normalizeEntryFee(msg.value) >= entryFeeInUSD);
         require(msg.value >= entryFee, "Entry fee not sufficient");
         require(
             _roundOneWinners.length == 32,
@@ -83,7 +95,7 @@ contract Pool {
             "roundFiveWinners length incorrect"
         );
 
-        playersBracketMapping[msg.sender] = BracketEntry(
+        addressToBracketMap[msg.sender] = BracketEntry(
             _teamName,
             _roundOneWinners,
             _roundTwoWinners,
@@ -95,7 +107,7 @@ contract Pool {
             true
         );
 
-        playersAddressMapping[numberOfPlayers] = msg.sender;
+        uintToAddressMap[numberOfPlayers] = msg.sender;
         etherInPot = etherInPot + msg.value;
         numberOfPlayers++;
         address sender = msg.sender;
@@ -110,7 +122,7 @@ contract Pool {
         string[] memory _roundFiveWinners,
         string memory _overallWinner
     ) public payable {
-        // logic to compare to all playersBracketMapping
+        // logic to compare to all addressToBracketMap
         address winnerAddress;
         uint256 winnerScore = 0;
         require(_roundOneWinners.length == 32);
@@ -124,8 +136,8 @@ contract Pool {
         for (uint256 i = 0; i <= numberOfPlayers - 1; i++) {
             uint256 currentScoreForPlayer = 0;
 
-            BracketEntry memory playersBracketStruct = playersBracketMapping[
-                playersAddressMapping[i]
+            BracketEntry memory playersBracketStruct = addressToBracketMap[
+                uintToAddressMap[i]
             ];
             // ~~~ Round One ~~~~
             currentScoreForPlayer = totalRound(
@@ -183,8 +195,29 @@ contract Pool {
     }
 
     // Helper Functions
+    function normalizeEntryFee() public view returns (int256) {
+        // Return a uint in wei
+        // Pool receives  msg.value in wei, must convert it into usd
+        int256 currentPriceUSD = getLatestPrice();
+        int256 entryFeeTimesEth = entryFeeInUSD * 10**18;
+        int256 feeInWei = entryFeeTimesEth / currentPriceUSD;
+
+        return feeInWei;
+    }
+
+    function getLatestPrice() public view returns (int256) {
+        (
+            uint80 roundID,
+            int256 price,
+            uint256 startedAt,
+            uint256 timeStamp,
+            uint80 answeredInRound
+        ) = priceFeed.latestRoundData();
+        return price;
+    }
+
     function compareStrings(string memory a, string memory b)
-        public
+        internal
         pure
         returns (bool)
     {
@@ -212,20 +245,13 @@ contract Pool {
     }
 
     // Getter functions
-    function getNumberEntries() public view returns (uint256) {
-        return numberOfPlayers;
-    }
-
-    function getWinnerAddress() public view returns (address) {
-        return winner;
-    }
 
     function getPlayersEntry(address _addr)
         public
         view
         returns (BracketEntry memory)
     {
-        return playersBracketMapping[_addr];
+        return addressToBracketMap[_addr];
     }
 
     function retrieveRules()
