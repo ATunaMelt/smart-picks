@@ -9,10 +9,10 @@ contract PoolFactory {
 
     function createNewPool(
         string memory _poolName,
-        uint256 _entryFee,
+        int256 _entryFeeInUSD,
         uint256 _maximumPlayers
     ) public returns (address) {
-        Pool pool = new Pool(_poolName, _entryFee, _maximumPlayers);
+        Pool pool = new Pool(_poolName, _entryFeeInUSD, _maximumPlayers);
         poolArray.push(pool);
         numberOfPoolContracts++;
         return address(pool);

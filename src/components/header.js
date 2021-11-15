@@ -13,7 +13,7 @@ export default function Header() {
     isAuthenticated,
     logout,
     isAuthenticating,
-    isWeb3EnableLoading,
+    isWeb3EnableLoading
   } = useMoralis();
 
   const enableAndAuthenticate = async () => {
@@ -43,36 +43,37 @@ export default function Header() {
 
   return (
     <StylesProvider injectFirst>
-        <AppBar position='fixed' className='primary-background'>
-          <Toolbar className='primary-background'>
-            <Typography
-              variant='h6'
-              component='div'
-              to={'/'}
-              sx={{ flexGrow: 1 }}
+      <AppBar position='fixed' className='primary-background'>
+        <Toolbar className='primary-background'>
+          <Typography
+            variant='h6'
+            component='div'
+            to={'/'}
+            sx={{ flexGrow: 1 }}
+          >
+            SmartPicks
+          </Typography>
+          {createMenuItem('/', 'View Pools')}
+          {createMenuItem('/pool/new', 'Create Pool')}
+          {createMenuItem('/brackets', 'Brackets')}
+          {createMenuItem('/about', 'About')}
+          {
+            <button
+              onClick={() => {
+                if (!isWeb3Enabled || !isAuthenticated) {
+                  enableAndAuthenticate();
+                } else logout();
+              }}
             >
-              SmartPicks
-            </Typography>
-            {createMenuItem('/', 'View Pools')}
-            {createMenuItem('/pool/new', 'Create Pool')}
-            {createMenuItem('/brackets', 'Brackets')}
-            {createMenuItem('/about', 'About')}
-            {
-              <button
-                onClick={() => {
-                  if (!isWeb3Enabled || !isAuthenticated) {
-                    enableAndAuthenticate();
-                  } else logout();
-                }}
-              >
-                {(isAuthenticating || isWeb3EnableLoading) && 'Loading'}
-                {(!isAuthenticated || !isWeb3EnableLoading) &&
-                  '🦊 Login with Metamask'}
-                {isAuthenticated && '  Logout'}
-              </button>
-            }
-          </Toolbar>
-        </AppBar>
+              {(isAuthenticating || isWeb3EnableLoading) && 'Loading'}
+              {!isAuthenticated &&
+                !isWeb3EnableLoading &&
+                '🦊 Login with Metamask'}
+              {isAuthenticated && '  Logout'}
+            </button>
+          }
+        </Toolbar>
+      </AppBar>
     </StylesProvider>
   );
 }

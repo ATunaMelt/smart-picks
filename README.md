@@ -1,5 +1,6 @@
 ### `Getting Started`
-1. Set up your .env file with `KOVAN_PRIVATE_KEY`, `REACT_APP_MORALIS_APP_ID`, `REACT_APP_MORALIS_SERVER_URL`, and `ALCHEMY_API_KEY` defined.
+
+1. Set up your .env file with `KOVAN_PRIVATE_KEY`, `REACT_APP_MORALIS_APP_ID`, `REACT_APP_MORALIS_SERVER_URL`, and `REACT_APP_ALCHEMY_API_KEY` defined.
 2. run `npm install`
 3. run `npx hardhat deploy-kovan` to deploy the smart contracts on the kovan network. This will automatically populate your `constants/PoolFactory.json` and `constants/poolFactoryAddress.js` files
 4. run `npm start` to run it in [http://localhost:3000](http://localhost:3000)

@@ -2,24 +2,22 @@ import { useState, useEffect } from 'react';
 import CustomTable from '../components/table.js';
 import Title from '../components/title.js';
 import { TextField } from '@mui/material';
-import { Web3Provider } from '@ethersproject/providers';
 import { useMoralis } from 'react-moralis';
 import { abi as factoryABI } from '../constants/PoolFactory.json';
 import { abi as poolABI } from '../constants/Pool.json';
-
 import poolFactoryAddress from '../constants/poolFactoryAddress.js';
 import { Button } from '@mui/material';
 
 const filterPools = (pools, search) => {
   if (!search || search.length === 0) return pools;
-  return pools.filter((pool) => pool.name.includes(search));
+  return pools.filter((pool) => pool.title.includes(search));
 };
 
 export default function ViewPools() {
   const { Moralis } = useMoralis();
   const factoryOptions = {
     abi: factoryABI,
-    contractAddress: poolFactoryAddress,
+    contractAddress: poolFactoryAddress
   };
   const poolOptions = { abi: poolABI };
 
@@ -32,26 +30,23 @@ export default function ViewPools() {
     await Moralis.enableWeb3();
     let tx = await Moralis.executeFunction({
       functionName: 'getAllPools',
-      ...factoryOptions,
+      ...factoryOptions
     });
-    // console.log('return form tx', tx[2]);
 
     if (tx[2].length !== poolAddresses.length) {
       let poolDetails = tx[2].map(async (address) => {
-        // retrieve pool info from address
-
         let rules = await Moralis.executeFunction({
           functionName: 'retrieveRules',
           contractAddress: address,
-          ...poolOptions,
+          ...poolOptions
         });
         return {
           title: rules._poolName,
-          price: rules._entryFee,
+          price: rules._entryFeeInUSD,
           entrants: rules._numberOfPlayers,
           maxPlayers: rules._maximumPlayers,
           etherInPot: rules._etherInPot,
-          address: address,
+          address: address
         };
       });
       poolDetails = await Promise.all(poolDetails);

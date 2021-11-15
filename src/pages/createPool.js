@@ -1,5 +1,4 @@
-import { Web3Provider } from '@ethersproject/providers';
-import { Input, ButtonS, Button } from '@mui/material';
+import { Input, Button, InputAdornment } from '@mui/material';
 import { useState } from 'react';
 import { useMoralis } from 'react-moralis';
 import Title from '../components/title';
@@ -18,10 +17,10 @@ export default function CreatePool() {
       functionName: 'createNewPool',
       params: {
         _poolName: poolName,
-        _entryFee: entryFee,
-        _maximumPlayers: maximumPlayers,
+        _entryFeeInUSD: entryFee,
+        _maximumPlayers: maximumPlayers
       },
-      ...options,
+      ...options
     });
   };
   const handleInputChange = (event, contractInput) => {
@@ -33,11 +32,11 @@ export default function CreatePool() {
   return (
     <div className='page'>
       <Title title='Create Pool' />
-
       <div className='create-section'>
         <div className='input-group'>
           <label htmlFor='name'>Enter name for the pool: </label>
           <Input
+            required='true'
             name='name'
             type='string'
             defaultValue={poolName}
@@ -50,6 +49,7 @@ export default function CreatePool() {
         <div className='input-group'>
           <label htmlFor='players'>Enter Number of players:</label>
           <Input
+            required='true'
             name='players'
             type='number'
             defaultValue={maximumPlayers}
@@ -59,16 +59,20 @@ export default function CreatePool() {
             }}
           />
         </div>
+
         <div className='input-group'>
           <label htmlFor='fee'>Enter entry fee:</label>
           <Input
+            required='true'
             name='fee'
             type='number'
+            InputAdornment='$'
             defaultValue={entryFee}
             inputProps={{ min: '1' }}
             onChange={(event) => {
               handleInputChange(event, 'fee');
             }}
+            startAdornment={<InputAdornment position='start'>$</InputAdornment>}
           />
         </div>
         <Button variant='outlined' onClick={createNewSmartContract}>
