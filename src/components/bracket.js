@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import Button from '@mui/material/Button';
 import '../styles/bracket.scss';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const starterGames = {
   west: [
@@ -85,8 +85,17 @@ function BracketItem(props) {
   const [variant, setVariant] = useState(
     teamObj.win ? 'contained' : 'outlined'
   );
-
   if (variant === 'contained' && !teamObj.win) setVariant('outlined');
+
+  useEffect(() => {
+    if (variant === 'contained' && !teamObj.win) {
+      setVariant('outlined');
+    }
+
+    if (variant === 'outlined' && teamObj.win) {
+      setVariant('contained');
+    }
+  });
 
   const buttonClick = () => {
     if (!teamObj.team || !teamObj.parent) return;
@@ -269,6 +278,14 @@ function renderTree(root, refreshBracket) {
 export default function Bracket(props) {
   let [rounds, setRounds] = useState([]);
   const { selectedWinners } = props;
+  const [selectedBracket, setSelectedBracket] = useState(props.selectedWinners);
+
+  useEffect(() => {
+    if (selectedBracket !== props.selectedWinners) {
+      setSelectedBracket(props.selectedWinners);
+      refreshBracket();
+    }
+  });
 
   let rootNode = buildTree();
 
@@ -280,7 +297,7 @@ export default function Bracket(props) {
     const rightRounds = [];
     const winner = selectedWinners ? selectedWinners.winner : null;
 
-    if (selectedWinners) {
+    if (selectedWinners && selectedWinners.winner) {
       leftRounds.push(selectedWinners.roundOne.slice(0, 16));
       rightRounds.unshift(selectedWinners.roundOne.slice(16));
       leftRounds.push(selectedWinners.roundTwo.slice(0, 8));
