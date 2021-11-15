@@ -20,7 +20,7 @@ module.exports = {
   solidity: '0.8.4',
   networks: {
     kovan: {
-      url: `https://eth-kovan.alchemyapi.io/v2/${process.env.ALCHEMY_API_KEY}`,
+      url: `https://eth-kovan.alchemyapi.io/v2/${process.env.REACT_APP_ALCHEMY_API_KEY}`,
       accounts: [`0x${process.env.KOVAN_PRIVATE_KEY}`]
     }
   }

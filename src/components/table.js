@@ -32,6 +32,7 @@ function createData(type, data) {
   if (type === 'pool') {
     POOL_CONSTANTS.forEach((col) => (formattedData[col.id] = data[col.id]));
     formattedData.entrants += `/${data.maxPlayers}`;
+    formattedData.price = '$ ' + formattedData.price / 10 ** 8;
   } else {
     BRACKET_CONSTANTS.forEach((col) => (formattedData[col.id] = data[col.id]));
     formattedData.id = data.id;

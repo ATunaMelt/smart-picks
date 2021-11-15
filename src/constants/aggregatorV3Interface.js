@@ -47,3 +47,5 @@ export const aggregatorV3InterfaceABI = [
     type: 'function'
   }
 ];
+export const aggregatorV3InterfaceAddress =
+  '0x9326BFA02ADD2366b30bacB125260Af641031331';

@@ -11,12 +11,20 @@ import {
 import { useMoralis } from 'react-moralis';
 import { abi as poolABI } from '../constants/Pool.json';
 import BracketContainer from '../containers/bracketContainer';
+import Web3 from 'web3';
+import {
+  aggregatorV3InterfaceABI,
+  aggregatorV3InterfaceAddress
+} from '../constants/aggregatorV3Interface';
 
 export default function JoinPool() {
   const { Moralis } = useMoralis();
   const params = useParams();
   const poolOptions = { abi: poolABI, contractAddress: params.id };
-
+  const aggregatorV3InterfaceOptions = {
+    abi: aggregatorV3InterfaceABI,
+    contractAddress: aggregatorV3InterfaceAddress
+  };
   const [pool, setPool] = useState({});
   const [selectedBracket, setSelectedBracket] = useState('');
   const [selectedBracketName, setSelectedBracketName] = useState({});
@@ -26,7 +34,6 @@ export default function JoinPool() {
 
   const retrievePoolInformation = async (address) => {
     await Moralis.enableWeb3();
-
     let rules = await Moralis.executeFunction({
       functionName: 'retrieveRules',
       contractAddress: params.id,
@@ -35,7 +42,7 @@ export default function JoinPool() {
 
     setPool({
       title: rules._poolName,
-      price: rules._entryFee,
+      price: rules._entryFeeInUSD,
       entrants: rules._numberOfPlayers,
       maxPlayers: rules._maximumPlayers,
       etherInPot: rules._etherInPot,
@@ -43,6 +50,14 @@ export default function JoinPool() {
     });
   };
 
+  const lastPrice = async () => {
+    await Moralis.enableWeb3();
+    let etherPriceUSD = await Moralis.executeFunction({
+      functionName: 'latestRoundData',
+      ...aggregatorV3InterfaceOptions
+    });
+    return etherPriceUSD[1];
+  };
   useEffect(async () => {
     if (!pool.title) {
       await retrievePoolInformation();
@@ -62,8 +77,16 @@ export default function JoinPool() {
   const handleInputChange = (event) => {
     setTeamName(event.target.value);
   };
+  const entryFeeToWei = async () => {
+    return await Moralis.executeFunction({
+      functionName: 'getCurrentEntryFeeInWei',
+      ...poolOptions
+    });
+  };
 
   const onSave = async (bracket) => {
+    let _msgValue = await entryFeeToWei(pool.price);
+    console.log(_msgValue);
     let tx = await Moralis.executeFunction({
       functionName: 'enterPool',
       params: {
@@ -75,7 +98,7 @@ export default function JoinPool() {
         _roundFiveWinners: bracket.roundFive,
         _overallWinner: bracket.winner
       },
-      msgValue: pool.price,
+      msgValue: _msgValue,
       ...poolOptions
     });
   };
@@ -91,7 +114,7 @@ export default function JoinPool() {
       />
       <div className='center pool-details'>
         <div className='half'>
-          <p>Price to join: {pool.price} </p>
+          <p>Price to join: {'$ ' + pool.price / 10 ** 8} </p>
           <p>Max number of players: {pool.maxPlayers}</p>
         </div>
         <div className='half'>
