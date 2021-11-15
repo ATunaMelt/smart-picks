@@ -5,6 +5,16 @@ import { useMoralis } from 'react-moralis';
 import Title from '../components/title';
 import { abi } from '../constants/PoolFactory.json';
 import poolFactoryAddress from '../constants/poolFactoryAddress.js';
+import { aggregatorV3InterfaceABI } from '../constants/aggregatorV3InterfaceABI';
+
+/*
+const Web3 = require('web3'); // for nodejs only
+const web3 = new Web3(
+  `https://eth-kovan.alchemyapi.io/v2/${process.env.ALCHEMY_API_KEY}`
+);
+const addr = '0x9326BFA02ADD2366b30bacB125260Af641031331';
+const priceFeed = new web3.eth.Contract(aggregatorV3InterfaceABI, addr);
+ */
 
 export default function CreatePool() {
   const { Moralis } = useMoralis();
@@ -13,6 +23,16 @@ export default function CreatePool() {
   const [maximumPlayers, setMaximumPlayers] = useState(2);
   const [poolName, setPoolName] = useState('');
 
+  /*
+  const getLastPrice = () =>
+    priceFeed.methods
+      .latestRoundData()
+      .call()
+      .then((roundData) => {
+        // Do something with roundData
+        console.log('Latest Round Data', roundData);
+      });
+  */
   const createNewSmartContract = async (event) => {
     let tx = await Moralis.executeFunction({
       functionName: 'createNewPool',
@@ -59,6 +79,7 @@ export default function CreatePool() {
             }}
           />
         </div>
+
         <div className='input-group'>
           <label htmlFor='fee'>Enter entry fee:</label>
           <Input
@@ -71,6 +92,9 @@ export default function CreatePool() {
             }}
           />
         </div>
+        <Button variant='outlined' onClick={console.log('hi')}>
+          {'Update price'}
+        </Button>
         <Button variant='outlined' onClick={createNewSmartContract}>
           {'Create Pool'}
         </Button>
