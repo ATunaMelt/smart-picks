@@ -13,7 +13,7 @@ export const POOL_CONSTANTS = [
   },
   {
     id: 'price',
-    label: 'Buy In Price (wei)',
+    label: 'Buy In Price (USD)',
     numeric: true,
     disablePadding: false
   },

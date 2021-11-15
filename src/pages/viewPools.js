@@ -42,7 +42,7 @@ export default function ViewPools() {
         });
         return {
           title: rules._poolName,
-          price: rules._entryFee,
+          price: rules._entryFeeInUSD,
           entrants: rules._numberOfPlayers,
           maxPlayers: rules._maximumPlayers,
           etherInPot: rules._etherInPot,

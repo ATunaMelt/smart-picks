@@ -1,6 +1,7 @@
 //SPDX-License-Identifier: MIT
 pragma solidity >=0.8.0 <0.9.0;
 
+// 10^18 wei = 1 ether
 /*
 Still needed:
     1. Additional functionality for tiered payouts, currently winner take all
@@ -14,7 +15,6 @@ import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
  */
 contract Pool {
     string public poolName;
-    uint256 public entryFee;
     int256 public entryFeeInUSD;
     uint256 public maximumPlayers;
     uint256 public etherInPot;
@@ -44,14 +44,11 @@ contract Pool {
     constructor(
         string memory _poolName,
         int256 _entryFeeInUSD,
-        uint256 _entryFee,
         uint256 _maximumPlayers
     ) {
         poolName = _poolName;
-
-        entryFeeInUSD = _entryFeeInUSD;
-
-        entryFee = _entryFee;
+        // Chainlink price feed will return 8 decimals for USD, so we normalized to match to two
+        entryFeeInUSD = _entryFeeInUSD * 10**8;
         maximumPlayers = _maximumPlayers;
         etherInPot = 0;
         priceFeed = AggregatorV3Interface(
@@ -73,7 +70,8 @@ contract Pool {
             "Sender has already entered bracket"
         );
         // require(normalizeEntryFee(msg.value) >= entryFeeInUSD);
-        require(msg.value >= entryFee, "Entry fee not sufficient");
+        require(checkEntryFee(int256(msg.value)), "Entry fee not sufficient");
+
         require(
             _roundOneWinners.length == 32,
             "roundOneWinners length incorrect"
@@ -195,14 +193,15 @@ contract Pool {
     }
 
     // Helper Functions
-    function normalizeEntryFee() public view returns (int256) {
-        // Return a uint in wei
-        // Pool receives  msg.value in wei, must convert it into usd
-        int256 currentPriceUSD = getLatestPrice();
-        int256 entryFeeTimesEth = entryFeeInUSD * 10**18;
-        int256 feeInWei = entryFeeTimesEth / currentPriceUSD;
+    function getCurrentEntryFeeInWei() public view returns (int256) {
+        int256 entryFeeInWei = entryFeeInUSD * 10**18;
+        entryFeeInWei = entryFeeInWei / getLatestPrice();
+        return entryFeeInWei;
+    }
 
-        return feeInWei;
+    function checkEntryFee(int256 value) public view returns (bool) {
+        // was the passed in value higher than the original entry fee?
+        return (value >= getCurrentEntryFeeInWei());
     }
 
     function getLatestPrice() public view returns (int256) {
@@ -259,14 +258,14 @@ contract Pool {
         view
         returns (
             string memory _poolName,
-            uint256 _entryFee,
+            int256 _entryFeeInUSD,
             uint256 _maximumPlayers,
             uint256 _etherInPot,
             uint256 _numberOfPlayers
         )
     {
         _poolName = poolName;
-        _entryFee = entryFee;
+        _entryFeeInUSD = entryFeeInUSD;
         _maximumPlayers = maximumPlayers;
         _etherInPot = etherInPot;
         _numberOfPlayers = numberOfPlayers;
