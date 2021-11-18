@@ -26,6 +26,32 @@ export default function About() {
           </a>
           .
         </p>
+
+        <p> Built on: </p>
+        <img
+          className='logo'
+          src='https://assets-global.website-files.com/5f6b7190899f41fb70882d08/5f760a499b56c47b8fa74fbb_chainlink-logo.svg'
+        />
+        <img
+          className='logo'
+          src='https://hardhat.org/assets/img/Hardhat-logo.652a7049.svg'
+        />
+        <img
+          className='logo primary-background'
+          src='https://docs.ethers.io/v5/static/logo.svg'
+        />
+        <img
+          className='logo'
+          src='https://moralis.io/wp-content/uploads/2021/06/Moralis-Glass-Favicon.svg'
+        />
+        <img
+          className='logo primary-background'
+          src='https://www.alchemytech.io/images/about_logo.png'
+        />
+        <img
+          className='logo'
+          src='https://sportsdata.io/assets/images/logos/sportsdataio-light-270.png'
+        />
       </div>
     </div>
   );

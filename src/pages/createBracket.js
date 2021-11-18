@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import BracketContainer from '../containers/bracketContainer';
 import Title from '../components/title';
 import { Redirect } from 'react-router-dom';
 
-export default function CreateBracket() {
+export default function CreateBracket(props) {
   const [isSaved, setIsSaved] = useState(false);
 
   const onSave = (bracket) => {
@@ -24,6 +24,7 @@ export default function CreateBracket() {
         saveChanges={onSave}
         buttonText='Save'
         showBracketTitle={true}
+        selectedWinners={{}}
       />
     </div>
   );
