@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Brackets from '../components/bracket';
 import { Button, Input } from '@mui/material';
 import PropTypes from 'prop-types';
@@ -8,6 +8,20 @@ export default function BracketContainer(props) {
   const [bracket, setBracket] = useState({});
   const { selectedWinners, saveChanges } = props;
 
+  useEffect(() => {
+    if (selectedWinners?.winner && !bracket.winner) {
+      setWinners(
+        selectedWinners.roundOne,
+        selectedWinners.roundTwo,
+        selectedWinners.roundThree,
+        selectedWinners.roundFour,
+        selectedWinners.roundFive,
+        selectedWinners.winner
+      );
+      bracket.title = selectedWinners.title;
+    }
+  });
+
   const setWinners = (
     roundOne,
     roundTwo,
@@ -16,22 +30,27 @@ export default function BracketContainer(props) {
     roundFive,
     overall
   ) => {
+    bracket.roundOne = roundOne;
+    bracket.roundTwo = roundTwo;
+    bracket.roundThree = roundThree;
+    bracket.roundFour = roundFour;
+    bracket.roundFive = roundFive;
+    bracket.winner = overall;
+
+    validateEntry();
+  };
+
+  const validateEntry = () => {
     let isReady = true;
-    if (!roundOne.every((item) => item)) isReady = false;
-    if (!roundTwo.every((item) => item)) isReady = false;
-    if (!roundThree.every((item) => item)) isReady = false;
-    if (!roundFour.every((item) => item)) isReady = false;
-    if (!roundFive.every((item) => item)) isReady = false;
-    if (!overall) isReady = false;
+    if (!bracket.roundOne.every((item) => item)) isReady = false;
+    if (!bracket.roundTwo.every((item) => item)) isReady = false;
+    if (!bracket.roundThree.every((item) => item)) isReady = false;
+    if (!bracket.roundFour.every((item) => item)) isReady = false;
+    if (!bracket.roundFive.every((item) => item)) isReady = false;
+    if (!bracket.winner) isReady = false;
+    if (bracket.title === '') isReady = false;
+
     if (isReady !== isValid) setIsValid(isReady);
-    if (isReady) {
-      bracket.roundOne = roundOne;
-      bracket.roundTwo = roundTwo;
-      bracket.roundThree = roundThree;
-      bracket.roundFour = roundFour;
-      bracket.roundFive = roundFive;
-      bracket.winner = overall;
-    }
   };
 
   const onSave = () => {
@@ -42,6 +61,7 @@ export default function BracketContainer(props) {
 
   const handleInputChange = (event) => {
     bracket.title = event.target.value;
+    validateEntry();
   };
 
   return (
