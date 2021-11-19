@@ -15,6 +15,7 @@
   height: 50px;
   margin: 10px;
   border-radius: 5px;
+  padding: 5px;
 }
 
 .name {
@@ -42,10 +43,13 @@
 .page {
   background: white;
   width: 100%;
+  margin: auto;
   margin-top: 100px;
   padding: 15px;
   border-radius: 5px;
   border: 1px solid rgba(0, 0, 0, 0.1);
+  max-width: 1200px;
+
 
   .refresh-icon {
     margin: 8px 25px;

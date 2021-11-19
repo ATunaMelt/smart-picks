@@ -26,8 +26,10 @@ export default function About() {
           </a>
           .
         </p>
+        <hr/>
+        <h3>Built With </h3>
 
-        <p> Built on: </p>
+
         <img
           className='logo'
           src='https://assets-global.website-files.com/5f6b7190899f41fb70882d08/5f760a499b56c47b8fa74fbb_chainlink-logo.svg'
@@ -52,6 +54,8 @@ export default function About() {
           className='logo'
           src='https://sportsdata.io/assets/images/logos/sportsdataio-light-270.png'
         />
+        <img className='logo' src='https://metamask.io/images/mm-logo.svg' />
+        <img className='logo' src='https://docs.ipfs.io/images/ipfs-logo.svg' />
       </div>
     </div>
   );
