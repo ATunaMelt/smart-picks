@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 
 import './styles/App.scss';
 import Header from './components/header.js';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { HashRouter as Router, Switch, Route } from 'react-router-dom';
 import ViewBrackets from './pages/viewBrackets';
 import CreatePool from './pages/createPool';
 import ViewPools from './pages/viewPools';
