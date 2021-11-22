@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Redirect } from 'react-router-dom';
 import Title from '../components/title.js';
 import BracketContainer from '../containers/bracketContainer';
 
 export default function EditBracket() {
+  const [isSaved, setIsSaved] = useState(false);
   const [bracket, setBracket] = useState();
   const allBrackets = JSON.parse(window.localStorage.getItem('brackets')) || [];
   const params = useParams();
@@ -28,9 +29,12 @@ export default function EditBracket() {
       } else return bkt;
     });
     window.localStorage.setItem('brackets', JSON.stringify(updatedBrackets));
+    setIsSaved(true);
   };
 
-  return (
+  return isSaved ? (
+    <Redirect to={'/brackets'} />
+  ) : (
     <div className='page'>
       <Title title='Edit Bracket' />
 

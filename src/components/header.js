@@ -4,6 +4,7 @@ import '../styles/App.scss';
 import { NavLink } from 'react-router-dom';
 import { useMoralis } from 'react-moralis';
 import { useEffect } from 'react';
+import logo from '../styles/logo-white.png';
 
 export default function Header() {
   const {
@@ -51,7 +52,8 @@ export default function Header() {
             to={'/'}
             sx={{ flexGrow: 1 }}
           >
-            SmartPicks
+            <img className='header-logo' src={logo} />
+            <b>Smart</b>Picks
           </Typography>
           {createMenuItem('/', 'View Pools')}
           {createMenuItem('/pool/new', 'Create Pool')}

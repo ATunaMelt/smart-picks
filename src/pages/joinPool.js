@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { useParams } from 'react-router-dom';
 import Title from '../components/title.js';
 import {
@@ -17,7 +18,7 @@ import {
   aggregatorV3InterfaceAddress
 } from '../constants/aggregatorV3Interface';
 
-export default function JoinPool() {
+export default function JoinPool(props) {
   const { Moralis } = useMoralis();
   const params = useParams();
   const poolOptions = { abi: poolABI, contractAddress: params.id };
@@ -85,6 +86,7 @@ export default function JoinPool() {
   };
 
   const onSave = async (bracket) => {
+    props.updateSnacks('info', 'Join pool is pending');
     let _msgValue = await entryFeeToWei(pool.price);
     let tx = await Moralis.executeFunction({
       functionName: 'enterPool',
@@ -100,6 +102,7 @@ export default function JoinPool() {
       msgValue: _msgValue,
       ...poolOptions
     });
+    props.updateSnacks('success', 'Successfully joined pool');
   };
 
   return (
@@ -165,3 +168,7 @@ export default function JoinPool() {
     </div>
   );
 }
+
+JoinPool.propTypes = {
+  updateSnacks: PropTypes.func.isRequired
+};
