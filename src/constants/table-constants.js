@@ -2,32 +2,27 @@ export const POOL_CONSTANTS = [
   {
     id: 'title',
     label: 'Pool Title',
-    numeric: false,
-    disablePadding: true
+    numeric: false
   },
   {
     id: 'address',
     label: 'Contract Address',
-    numeric: false,
-    disablePadding: false
+    numeric: false
   },
   {
     id: 'price',
-    label: 'Buy In Price (USD)',
-    numeric: true,
-    disablePadding: false
+    label: 'Buy In (USD)',
+    numeric: true
   },
   {
     id: 'entrants',
-    label: 'Number of Participants',
-    numeric: true,
-    disablePadding: false
+    label: 'Participants',
+    numeric: true
   },
   {
     id: 'etherInPot',
     label: 'Prize Pool',
-    numeric: true,
-    disablePadding: false
+    numeric: true
   }
 ];
 
@@ -35,13 +30,11 @@ export const BRACKET_CONSTANTS = [
   {
     id: 'title',
     label: 'Bracket Title',
-    numeric: false,
-    disablePadding: true
+    numeric: false
   },
   {
     id: 'winner',
     label: 'Selected Winner',
-    numeric: false,
-    disablePadding: true
+    numeric: false
   }
 ];

@@ -7,6 +7,8 @@ import { abi as factoryABI } from '../constants/PoolFactory.json';
 import { abi as poolABI } from '../constants/Pool.json';
 import poolFactoryAddress from '../constants/poolFactoryAddress.js';
 import { Button } from '@mui/material';
+import RefreshIcon from '@mui/icons-material/Refresh';
+import { Link } from 'react-router-dom';
 
 const filterPools = (pools, search) => {
   if (!search || search.length === 0) return pools;
@@ -69,10 +71,6 @@ export default function ViewPools() {
   return (
     <div className='page'>
       <Title title='Pools' />
-      <Button variant='outlined' onClick={getPools}>
-        {'Refresh Pools'}
-      </Button>
-
       {filteredPools.length === 0 ? (
         <>
           <p>Look like there aren't any pools yet</p>
@@ -86,6 +84,14 @@ export default function ViewPools() {
             variant='outlined'
             onChange={search}
             size='small'
+          />
+
+          <Link className='pull-right' to='/pool/new'>
+            <Button variant='outlined'>Make New Pool</Button>
+          </Link>
+          <RefreshIcon
+            className='refresh-icon secondary-color pull-right'
+            onClick={getPools}
           />
           <CustomTable type='pool' data={filteredPools} />
         </>

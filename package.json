@@ -1,12 +1,14 @@
 {
   "name": "smart-picks",
   "version": "0.1.0",
+  "homepage": "./",
   "private": true,
   "dependencies": {
     "@chainlink/contracts": "^0.2.2",
     "@emotion/react": "^11.5.0",
     "@emotion/styled": "^11.3.0",
     "@material-ui/core": "^4.12.3",
+    "@mui/icons-material": "^5.1.1",
     "@mui/material": "^5.0.4",
     "@openzeppelin/contracts": "^4.3.2",
     "@testing-library/jest-dom": "^5.14.1",
@@ -28,7 +30,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "npx prettier --write ."
+    "lint": "npx prettier --write .",
+    "deploy": "npm run build && ipfs add -r build"
   },
   "eslintConfig": {
     "extends": [

@@ -4,8 +4,9 @@ import { useMoralis } from 'react-moralis';
 import Title from '../components/title';
 import { abi } from '../constants/PoolFactory.json';
 import poolFactoryAddress from '../constants/poolFactoryAddress.js';
+import PropTypes from 'prop-types';
 
-export default function CreatePool() {
+export default function CreatePool(props) {
   const { Moralis } = useMoralis();
   const options = { abi, contractAddress: poolFactoryAddress };
   const [entryFee, setEntryFee] = useState(1);
@@ -13,6 +14,8 @@ export default function CreatePool() {
   const [poolName, setPoolName] = useState('');
 
   const createNewSmartContract = async (event) => {
+    props.updateSnacks('info', 'Pool is pending');
+
     let tx = await Moralis.executeFunction({
       functionName: 'createNewPool',
       params: {
@@ -22,6 +25,8 @@ export default function CreatePool() {
       },
       ...options
     });
+
+    props.updateSnacks('success', 'Successfully created pool');
   };
   const handleInputChange = (event, contractInput) => {
     if (contractInput === 'players') setMaximumPlayers(event.target.value);
@@ -82,3 +87,7 @@ export default function CreatePool() {
     </div>
   );
 }
+
+CreatePool.propTypes = {
+  updateSnacks: PropTypes.func.isRequired
+};
