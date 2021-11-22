@@ -11,14 +11,29 @@ import CreateBracket from './pages/createBracket';
 import About from './pages/about';
 import EditBracket from './pages/editBracket';
 import CustomizedSnackbars from './components/snack';
+import { useMoralis } from 'react-moralis';
+import { NETWORK_IDS } from './constants/web3-constants';
+
 
 function App() {
+  const { Moralis, isAuthenticated } = useMoralis();
   const [snacks, setSnacks] = useState([]);
 
   const updateSnacks = (type, message) => {
     const newSnack = <CustomizedSnackbars alertType={type} message={message} />;
-    setSnacks([...snacks, newSnack]);
+    setSnacks([newSnack]);
   };
+
+  Moralis.onChainChanged(async() => {
+    const chainId = await Moralis.getChainId();
+
+    if (chainId && NETWORK_IDS.indexOf(chainId.toString()) === -1) {
+      updateSnacks('error', 'Network unsupported.');
+    } else {
+      updateSnacks('success', 'Successfully connected to supported network.');
+    }
+
+  })
 
   return (
     <Router>
