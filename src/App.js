@@ -14,7 +14,6 @@ import CustomizedSnackbars from './components/snack';
 import { useMoralis } from 'react-moralis';
 import { NETWORK_IDS } from './constants/web3-constants';
 
-
 function App() {
   const { Moralis, isAuthenticated } = useMoralis();
   const [snacks, setSnacks] = useState([]);
@@ -24,7 +23,7 @@ function App() {
     setSnacks([newSnack]);
   };
 
-  Moralis.onChainChanged(async() => {
+  Moralis.onChainChanged(async () => {
     const chainId = await Moralis.getChainId();
 
     if (chainId && NETWORK_IDS.indexOf(chainId.toString()) === -1) {
@@ -32,8 +31,7 @@ function App() {
     } else {
       updateSnacks('success', 'Successfully connected to supported network.');
     }
-
-  })
+  });
 
   return (
     <Router>
