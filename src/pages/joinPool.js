@@ -10,7 +10,7 @@ import {
   FormControl
 } from '@mui/material';
 import { useMoralis } from 'react-moralis';
-import { abi as poolABI } from '../constants/Pool.json';
+import { abi as poolABI } from '../constants/kovan/Pool.json';
 import BracketContainer from '../containers/bracketContainer';
 import Web3 from 'web3';
 import {

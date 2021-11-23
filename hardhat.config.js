@@ -23,12 +23,12 @@ module.exports = {
       url: `https://eth-kovan.alchemyapi.io/v2/${process.env.REACT_APP_ALCHEMY_API_KEY}`,
       accounts: [`0x${process.env.KOVAN_PRIVATE_KEY}`]
     },
-    matic: {
-      url: "https://rpc-mumbai.matic.today",
+    mumbai: {
+      url: 'https://rpc-mumbai.maticvigil.com',
       accounts: [`0x${process.env.MUMBAI_MATIC_KEY}`]
     },
     fuji: {
-      url: "https://api.avax-test.network/ext/bc/C/rpc",
+      url: 'https://api.avax-test.network/ext/bc/C/rpc',
       accounts: [`0x${process.env.FUJI_AVALANCHE_KEY}`]
     }
   }
