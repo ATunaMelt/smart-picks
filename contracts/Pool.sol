@@ -193,6 +193,14 @@ contract Pool {
     }
 
     // Helper Functions
+    // Keeper function - WIP
+    // function checkUpkeep(bytes calldata checkData)
+    //     external
+    //     returns (bool upkeepNeeded, bytes memory performData)
+    // {
+    //     return 1;
+    // }
+
     function getCurrentEntryFeeInWei() public view returns (int256) {
         int256 entryFeeInWei = entryFeeInUSD * 10**18;
         entryFeeInWei = entryFeeInWei / getLatestPrice();
