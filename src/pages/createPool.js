@@ -3,11 +3,10 @@ import { Input, Button, InputAdornment } from '@mui/material';
 import { useState, useEffect } from 'react';
 import { useMoralis } from 'react-moralis';
 import Title from '../components/title';
-import { abi } from '../constants/kovan/PoolFactory.json';
+import { abi } from '../constants/PoolFactoryABI.json';
 import poolFactoryAddress from '../constants/kovan/poolFactoryAddress.js';
 import PropTypes from 'prop-types';
-import getPoolInfo from '../services/networkService';
-import { NETWORKS } from '../constants/web3-constants.js';
+import { POOL_FACTORY_ADDRESSES } from '../constants/web3-constants.js';
 
 export default function CreatePool(props) {
   const { Moralis } = useMoralis();
@@ -19,8 +18,7 @@ export default function CreatePool(props) {
   const createNewSmartContract = async (event) => {
     props.updateSnacks('info', 'Pool is pending');
     const networkId = await Moralis.getChainId();
-    const network = NETWORKS[networkId];
-    const info = getPoolInfo(network);
+    const poolFactoryAddress = POOL_FACTORY_ADDRESSES[networkId];
     let tx = await Moralis.executeFunction({
       functionName: 'createNewPool',
       params: {
@@ -28,8 +26,8 @@ export default function CreatePool(props) {
         _entryFeeInUSD: entryFee,
         _maximumPlayers: maximumPlayers
       },
-      abi: info.poolFactoryABI,
-      contractAddress: info.factoryAddress
+      abi: abi,
+      contractAddress: poolFactoryAddress
     });
 
     props.updateSnacks('success', 'Successfully created pool');
