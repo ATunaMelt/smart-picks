@@ -4,10 +4,12 @@ import Title from '../components/title.js';
 import { TextField } from '@mui/material';
 import { useMoralis } from 'react-moralis';
 import getPoolInfo from '../services/networkService.js';
-import { NETWORKS } from '../constants/web3-constants.js';
+import { POOL_FACTORY_ADDRESSES } from '../constants/web3-constants.js';
 import { Button } from '@mui/material';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import { Link } from 'react-router-dom';
+import { abi as poolABI } from '../constants/PoolABI';
+import { abi as poolFactoryABI } from '../constants/PoolFactoryABI';
 
 const filterPools = (pools, search) => {
   if (!search || search.length === 0) return pools;
@@ -16,12 +18,7 @@ const filterPools = (pools, search) => {
 
 export default function ViewPools() {
   const { Moralis } = useMoralis();
-  const [poolContractSpecs, setPoolContractSpecs] = useState({
-    factoryAddress: '',
-    poolABI: '',
-    poolFactoryABI: '',
-    network: ''
-  });
+  const [poolFactoryAddress, setPoolFactoryAddress] = useState('');
   const [isLoaded, setIsLoaded] = useState(false);
   const [searchName, setSearchName] = useState('');
   const [poolAddresses, setPoolAddresses] = useState([]);
@@ -30,7 +27,7 @@ export default function ViewPools() {
 
   // eslint-disable-next-line
   useEffect(async () => {
-    if (poolContractSpecs.network === '') {
+    if (poolFactoryAddress === '') {
       await updateNetworkInfo();
     } else if (!isLoaded) {
       await getPools();
@@ -47,18 +44,16 @@ export default function ViewPools() {
   const updateNetworkInfo = async () => {
     await Moralis.enableWeb3();
     const networkId = await Moralis.getChainId();
-    const network = NETWORKS[networkId];
-    const info = getPoolInfo(network);
-    setPoolContractSpecs({ ...info, network });
+    setPoolFactoryAddress(POOL_FACTORY_ADDRESSES[networkId]);
   };
 
   const getPools = async () => {
-    if (poolContractSpecs.network === '') return;
+    if (poolFactoryAddress === '') return;
 
     let tx = await Moralis.executeFunction({
       functionName: 'getAllPools',
-      abi: poolContractSpecs.poolFactoryABI,
-      contractAddress: poolContractSpecs.factoryAddress
+      abi: poolFactoryABI,
+      contractAddress: poolFactoryAddress
     });
 
     if (tx[2].length !== poolAddresses.length) {
@@ -66,7 +61,7 @@ export default function ViewPools() {
         let rules = await Moralis.executeFunction({
           functionName: 'retrieveRules',
           contractAddress: address,
-          abi: poolContractSpecs.poolABI
+          abi: poolABI
           // contractAddress: poolContractSpecs.contractAddress
         });
         return {
