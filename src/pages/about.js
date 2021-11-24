@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/alt-text */
 import Title from '../components/title.js';
 
 export default function About() {

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useParams } from 'react-router-dom';
@@ -59,6 +60,7 @@ export default function JoinPool(props) {
     });
     return etherPriceUSD[1];
   };
+  // eslint-disable-next-line
   useEffect(async () => {
     if (!pool.title) {
       await retrievePoolInformation();
