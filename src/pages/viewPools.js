@@ -3,12 +3,12 @@ import CustomTable from '../components/table.js';
 import Title from '../components/title.js';
 import { TextField } from '@mui/material';
 import { useMoralis } from 'react-moralis';
-import { abi as factoryABI } from '../constants/PoolFactory.json';
-import { abi as poolABI } from '../constants/Pool.json';
-import poolFactoryAddress from '../constants/poolFactoryAddress.js';
+import { POOL_FACTORY_ADDRESSES } from '../constants/web3-constants.js';
 import { Button } from '@mui/material';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import { Link } from 'react-router-dom';
+import { abi as poolABI } from '../constants/PoolABI';
+import { abi as poolFactoryABI } from '../constants/PoolFactoryABI';
 
 const filterPools = (pools, search) => {
   if (!search || search.length === 0) return pools;
@@ -17,22 +17,44 @@ const filterPools = (pools, search) => {
 
 export default function ViewPools() {
   const { Moralis } = useMoralis();
-  const factoryOptions = {
-    abi: factoryABI,
-    contractAddress: poolFactoryAddress
-  };
-  const poolOptions = { abi: poolABI };
-
+  const [poolFactoryAddress, setPoolFactoryAddress] = useState('');
+  const [isLoaded, setIsLoaded] = useState(false);
   const [searchName, setSearchName] = useState('');
   const [poolAddresses, setPoolAddresses] = useState([]);
   const [allPools, setAllPools] = useState([]);
   let filteredPools = filterPools(allPools, searchName);
 
-  const getPools = async () => {
+  // eslint-disable-next-line
+  useEffect(async () => {
+    if (poolFactoryAddress === '') {
+      await updateNetworkInfo();
+    } else if (!isLoaded) {
+      await getPools();
+      setIsLoaded(true);
+    }
+    filteredPools = filterPools(allPools, searchName);
+  });
+
+  Moralis.onChainChanged(async () => {
+    await updateNetworkInfo();
+    await getPools();
+  });
+
+  const updateNetworkInfo = async () => {
     await Moralis.enableWeb3();
+    const networkId = await Moralis.getChainId();
+    if (POOL_FACTORY_ADDRESSES[networkId] !== poolFactoryAddress) {
+      setPoolFactoryAddress(POOL_FACTORY_ADDRESSES[networkId]);
+    }
+  };
+
+  const getPools = async () => {
+    if (poolFactoryAddress === '') return;
+
     let tx = await Moralis.executeFunction({
       functionName: 'getAllPools',
-      ...factoryOptions
+      abi: poolFactoryABI,
+      contractAddress: poolFactoryAddress
     });
 
     if (tx[2].length !== poolAddresses.length) {
@@ -40,7 +62,8 @@ export default function ViewPools() {
         let rules = await Moralis.executeFunction({
           functionName: 'retrieveRules',
           contractAddress: address,
-          ...poolOptions
+          abi: poolABI
+          // contractAddress: poolContractSpecs.contractAddress
         });
         return {
           title: rules._poolName,
@@ -56,12 +79,6 @@ export default function ViewPools() {
       setAllPools(poolDetails);
     }
   };
-  useEffect(async () => {
-    if (allPools.length === 0) {
-      await getPools();
-    }
-    filteredPools = filterPools(allPools, searchName);
-  });
 
   const search = (event) => {
     (event.target.value.length >= 3 || event.target.value.length === 0) &&
