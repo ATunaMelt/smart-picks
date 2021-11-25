@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/alt-text */
 import Title from '../components/title.js';
 
 export default function About() {
@@ -26,9 +27,8 @@ export default function About() {
           </a>
           .
         </p>
-        <hr/>
+        <hr />
         <h3>Built With </h3>
-
 
         <img
           className='logo'
@@ -56,6 +56,14 @@ export default function About() {
         />
         <img className='logo' src='https://metamask.io/images/mm-logo.svg' />
         <img className='logo' src='https://docs.ipfs.io/images/ipfs-logo.svg' />
+        <img
+          className='logo'
+          src='https://polygon.technology/wp-content/uploads/2021/07/polygon-logo.svg'
+        />
+        <img
+          className='logo'
+          src='https://assets.website-files.com/6059b554e81c705f9dd2dd32/6100222344a9783fbdf5a4f2_Group%203004.svg'
+        />
       </div>
     </div>
   );
