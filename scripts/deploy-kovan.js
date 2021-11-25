@@ -48,12 +48,12 @@ async function main() {
       if (err) throw err;
     }
   );
-  fs.writeFileSync('src/constants/kovan/Pool.json', poolJson, (err) => {
+  fs.writeFileSync('src/constants/PoolABI.json', poolJson, (err) => {
     console.log('poolJson, now contains', poolJson);
     if (err) throw err;
   });
   fs.writeFileSync(
-    'src/constants/kovan/PoolFactory.json',
+    'src/constants/PoolFactoryABI.json',
     poolFactoryJson,
     (err) => {
       console.log('poolFactoryJson, now contains', poolFactoryJson);
