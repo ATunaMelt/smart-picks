@@ -11,7 +11,7 @@ import {
   FormControl
 } from '@mui/material';
 import { useMoralis } from 'react-moralis';
-import { abi as poolABI } from '../constants/kovan/Pool.json';
+import { abi } from '../constants/PoolABI.json';
 import BracketContainer from '../containers/bracketContainer';
 import Web3 from 'web3';
 import {
@@ -22,7 +22,7 @@ import {
 export default function JoinPool(props) {
   const { Moralis } = useMoralis();
   const params = useParams();
-  const poolOptions = { abi: poolABI, contractAddress: params.id };
+  const poolOptions = { abi, contractAddress: params.id };
   const aggregatorV3InterfaceOptions = {
     abi: aggregatorV3InterfaceABI,
     contractAddress: aggregatorV3InterfaceAddress
@@ -89,6 +89,7 @@ export default function JoinPool(props) {
 
   const onSave = async (bracket) => {
     props.updateSnacks('info', 'Join pool is pending');
+    try {
     let _msgValue = await entryFeeToWei(pool.price);
     let tx = await Moralis.executeFunction({
       functionName: 'enterPool',
@@ -105,6 +106,10 @@ export default function JoinPool(props) {
       ...poolOptions
     });
     props.updateSnacks('success', 'Successfully joined pool');
+  } catch (err) {
+    props.updateSnacks('error', 'Error joining pool');
+
+  }
   };
 
   return (

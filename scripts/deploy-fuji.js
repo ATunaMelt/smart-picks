@@ -19,8 +19,8 @@ async function main() {
   console.log('Deploying contracts with the account:', deployer.address);
   console.log('Account balance:', (await deployer.getBalance()).toString());
 
-  const Pool = await ethers.getContractFactory('Pool');
-  const PoolFactory = await ethers.getContractFactory('PoolFactory');
+  const Pool = await ethers.getContractFactory('PoolFuji');
+  const PoolFactory = await ethers.getContractFactory('FujiPoolFactory');
 
   // const pool = await Pool.deploy(2, 2);
   const poolFactory = await PoolFactory.deploy();

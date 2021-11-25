@@ -31,7 +31,10 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "npx prettier --write .",
-    "deploy": "npm run build && ipfs add -r build"
+    "deploy": "npm run build && ipfs add -r build",
+    "deploy-fuji": "npx hardhat run --network fuji scripts/deploy-fuji.js",
+    "deploy-mumbai": "npx hardhat run --network mumbai scripts/deploy-mumbai.js",
+    "deploy-kovan": "npx hardhat run --network kovan scripts/deploy-kovan.js"
   },
   "eslintConfig": {
     "extends": [

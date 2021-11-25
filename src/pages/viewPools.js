@@ -3,7 +3,6 @@ import CustomTable from '../components/table.js';
 import Title from '../components/title.js';
 import { TextField } from '@mui/material';
 import { useMoralis } from 'react-moralis';
-import getPoolInfo from '../services/networkService.js';
 import { POOL_FACTORY_ADDRESSES } from '../constants/web3-constants.js';
 import { Button } from '@mui/material';
 import RefreshIcon from '@mui/icons-material/Refresh';
@@ -38,13 +37,15 @@ export default function ViewPools() {
 
   Moralis.onChainChanged(async () => {
     await updateNetworkInfo();
-    setIsLoaded(false);
+    await getPools();
   });
 
   const updateNetworkInfo = async () => {
     await Moralis.enableWeb3();
     const networkId = await Moralis.getChainId();
-    setPoolFactoryAddress(POOL_FACTORY_ADDRESSES[networkId]);
+    if (POOL_FACTORY_ADDRESSES[networkId] !== poolFactoryAddress) {
+      setPoolFactoryAddress(POOL_FACTORY_ADDRESSES[networkId]);
+    }
   };
 
   const getPools = async () => {
