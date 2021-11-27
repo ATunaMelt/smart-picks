@@ -12,7 +12,11 @@ contract FujiPoolFactory {
         int256 _entryFeeInUSD,
         uint256 _maximumPlayers
     ) public returns (address) {
-        PoolFuji pool = new PoolFuji(_poolName, _entryFeeInUSD, _maximumPlayers);
+        PoolFuji pool = new PoolFuji(
+            _poolName,
+            _entryFeeInUSD,
+            _maximumPlayers
+        );
         poolArray.push(pool);
         numberOfPoolContracts++;
         return address(pool);
