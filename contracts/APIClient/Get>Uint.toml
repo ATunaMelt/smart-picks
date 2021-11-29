@@ -1,6 +1,6 @@
 type = "directrequest"
 schemaVersion = 1
-name = "Get > Uint256"
+name = "Get > Bytes[]"
 contractAddress = "0x74321B864C661eD50f25107CA60e40bD5d6f12B4"
 maxTaskDuration = "0s"
 observationSource = """
