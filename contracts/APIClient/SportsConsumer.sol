@@ -4,7 +4,7 @@ pragma solidity ^0.8.7;
 import "@chainlink/contracts/src/v0.8/ChainlinkClient.sol";
 import "@chainlink/contracts/src/v0.8/ConfirmedOwner.sol";
 
-contract ATestnetConsumer is ChainlinkClient, ConfirmedOwner {
+contract SportsConsumer is ChainlinkClient, ConfirmedOwner {
     using Chainlink for Chainlink.Request;
 
     uint256 private constant ORACLE_PAYMENT = 1 * LINK_DIVISIBILITY;
@@ -15,7 +15,7 @@ contract ATestnetConsumer is ChainlinkClient, ConfirmedOwner {
 
     event RequestEthereumPriceFulfilled(
         bytes32 indexed requestId,
-        uint256 indexed price
+        bytes[] indexed games
     );
 
     event RequestEthereumChangeFulfilled(
@@ -35,7 +35,8 @@ contract ATestnetConsumer is ChainlinkClient, ConfirmedOwner {
     function requestEthereumPrice(
         address _oracle,
         string memory _jobId,
-        string memory _endpoint
+        string memory _endpoint,
+        string memory _parsePath
     ) public onlyOwner {
         Chainlink.Request memory req = buildChainlinkRequest(
             stringToBytes32(_jobId),
@@ -43,7 +44,7 @@ contract ATestnetConsumer is ChainlinkClient, ConfirmedOwner {
             this.fulfillEthereumPrice.selector
         );
         req.add("get", _endpoint);
-        req.add("path", "Games");
+        req.add("path", _parsePath);
         // req.addInt("times", 100);
         sendChainlinkRequestTo(_oracle, req, ORACLE_PAYMENT);
     }
@@ -88,12 +89,12 @@ contract ATestnetConsumer is ChainlinkClient, ConfirmedOwner {
         sendChainlinkRequestTo(_oracle, req, ORACLE_PAYMENT);
     }
 
-    function fulfillEthereumPrice(bytes32 _requestId, uint256 _price)
+    function fulfillEthereumPrice(bytes32 _requestId, bytes[] memory _games)
         public
         recordChainlinkFulfillment(_requestId)
     {
-        emit RequestEthereumPriceFulfilled(_requestId, _price);
-        currentPrice = _price;
+        emit RequestEthereumPriceFulfilled(_requestId, _games);
+        games = _games;
     }
 
     function fulfillEthereumChange(bytes32 _requestId, int256 _change)
