@@ -12,7 +12,11 @@ contract MumbaiPoolFactory {
         int256 _entryFeeInUSD,
         uint256 _maximumPlayers
     ) public returns (address) {
-        PoolMumbai pool = new PoolMumbai(_poolName, _entryFeeInUSD, _maximumPlayers);
+        PoolMumbai pool = new PoolMumbai(
+            _poolName,
+            _entryFeeInUSD,
+            _maximumPlayers
+        );
         poolArray.push(pool);
         numberOfPoolContracts++;
         return address(pool);
