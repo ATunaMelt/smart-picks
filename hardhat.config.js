@@ -22,6 +22,14 @@ module.exports = {
     kovan: {
       url: `https://eth-kovan.alchemyapi.io/v2/${process.env.REACT_APP_ALCHEMY_API_KEY}`,
       accounts: [`0x${process.env.KOVAN_PRIVATE_KEY}`]
+    },
+    mumbai: {
+      url: 'https://rpc-mumbai.maticvigil.com',
+      accounts: [`0x${process.env.MUMBAI_MATIC_KEY}`]
+    },
+    fuji: {
+      url: 'https://api.avax-test.network/ext/bc/C/rpc',
+      accounts: [`0x${process.env.FUJI_AVALANCHE_KEY}`]
     }
   }
 };
