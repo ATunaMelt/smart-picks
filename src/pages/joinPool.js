@@ -1,4 +1,6 @@
+/* eslint-disable no-unused-vars */
 import { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { useParams } from 'react-router-dom';
 import Title from '../components/title.js';
 import {
@@ -9,7 +11,7 @@ import {
   FormControl
 } from '@mui/material';
 import { useMoralis } from 'react-moralis';
-import { abi as poolABI } from '../constants/Pool.json';
+import { abi } from '../constants/PoolABI.json';
 import BracketContainer from '../containers/bracketContainer';
 import Web3 from 'web3';
 import {
@@ -17,10 +19,10 @@ import {
   aggregatorV3InterfaceAddress
 } from '../constants/aggregatorV3Interface';
 
-export default function JoinPool() {
+export default function JoinPool(props) {
   const { Moralis } = useMoralis();
   const params = useParams();
-  const poolOptions = { abi: poolABI, contractAddress: params.id };
+  const poolOptions = { abi, contractAddress: params.id };
   const aggregatorV3InterfaceOptions = {
     abi: aggregatorV3InterfaceABI,
     contractAddress: aggregatorV3InterfaceAddress
@@ -58,6 +60,7 @@ export default function JoinPool() {
     });
     return etherPriceUSD[1];
   };
+  // eslint-disable-next-line
   useEffect(async () => {
     if (!pool.title) {
       await retrievePoolInformation();
@@ -85,21 +88,27 @@ export default function JoinPool() {
   };
 
   const onSave = async (bracket) => {
-    let _msgValue = await entryFeeToWei(pool.price);
-    let tx = await Moralis.executeFunction({
-      functionName: 'enterPool',
-      params: {
-        _teamName: teamName,
-        _roundOneWinners: bracket.roundOne,
-        _roundTwoWinners: bracket.roundTwo,
-        _roundThreeWinners: bracket.roundThree,
-        _roundFourWinners: bracket.roundFour,
-        _roundFiveWinners: bracket.roundFive,
-        _overallWinner: bracket.winner
-      },
-      msgValue: _msgValue,
-      ...poolOptions
-    });
+    props.updateSnacks('info', 'Join pool is pending');
+    try {
+      let _msgValue = await entryFeeToWei(pool.price);
+      let tx = await Moralis.executeFunction({
+        functionName: 'enterPool',
+        params: {
+          _teamName: teamName,
+          _roundOneWinners: bracket.roundOne,
+          _roundTwoWinners: bracket.roundTwo,
+          _roundThreeWinners: bracket.roundThree,
+          _roundFourWinners: bracket.roundFour,
+          _roundFiveWinners: bracket.roundFive,
+          _overallWinner: bracket.winner
+        },
+        msgValue: _msgValue,
+        ...poolOptions
+      });
+      props.updateSnacks('success', 'Successfully joined pool');
+    } catch (err) {
+      props.updateSnacks('error', 'Error joining pool');
+    }
   };
 
   return (
@@ -165,3 +174,7 @@ export default function JoinPool() {
     </div>
   );
 }
+
+JoinPool.propTypes = {
+  updateSnacks: PropTypes.func.isRequired
+};

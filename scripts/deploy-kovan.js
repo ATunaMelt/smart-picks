@@ -41,21 +41,25 @@ async function main() {
   // console.log('Facotry articat', poolFactoryArtifact);
 
   fs.writeFileSync(
-    'src/constants/poolFactoryAddress.js',
+    'src/constants/kovan/poolFactoryAddress.js',
     `export default '${address}';`,
     (err) => {
       console.log('contract-address, now contains', poolFactory);
       if (err) throw err;
     }
   );
-  fs.writeFileSync('src/constants/Pool.json', poolJson, (err) => {
+  fs.writeFileSync('src/constants/PoolABI.json', poolJson, (err) => {
     console.log('poolJson, now contains', poolJson);
     if (err) throw err;
   });
-  fs.writeFileSync('src/constants/PoolFactory.json', poolFactoryJson, (err) => {
-    console.log('poolFactoryJson, now contains', poolFactoryJson);
-    if (err) throw err;
-  });
+  fs.writeFileSync(
+    'src/constants/PoolFactoryABI.json',
+    poolFactoryJson,
+    (err) => {
+      console.log('poolFactoryJson, now contains', poolFactoryJson);
+      if (err) throw err;
+    }
+  );
 }
 
 // We recommend this pattern to be able to use async/await everywhere
