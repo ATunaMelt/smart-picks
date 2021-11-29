@@ -1,28 +1,24 @@
-### `Getting Started`
+### Running it locally
 
 1. Set up your .env file with `KOVAN_PRIVATE_KEY`, `REACT_APP_MORALIS_APP_ID`, `REACT_APP_MORALIS_SERVER_URL`, and `REACT_APP_ALCHEMY_API_KEY` defined. Before deploying, you'll also need to add your `KOVAN_PRIVATE_KEY`, `MUMBAI_MATIC_KEY`, and `FUJI_AVALANCHE_KEY`. All variables that begin with `REACT_APP` will be available throughout the code; for security purposes, keys and wallets do not have this.
 2. run `npm install`
-3. run `npx hardhat deploy-kovan` to deploy the smart contracts on the kovan network. This will automatically populate your `constants/PoolFactory.json` and `constants/poolFactoryAddress.js` files
+3. run `npm run deploy-kovan` to deploy the smart contracts on the kovan network. This will automatically populate your `constants/PoolFactory.json` and `constants/poolFactoryAddress.js` files. You can also run `npm run deploy-mumbai` and `npm run deploy-fuji` to get set up on those networks as well.
 4. run `npm start` to run it in [http://localhost:3000](http://localhost:3000)
 
-### `npm test`
+### Contributing
 
-Launches the test runner in the interactive watch mode.\
+No changes or pull requests directly on `main` will be permitted. All pull requests should be made against the `develop` branch. Once that branch is tested and approved, it will be merged into `main`, and deployed.
 
-### `npm run build`
+### Deploying
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Smart Picks deploys automatically on updates to the `main` branch. It is deployed on IPFS via Fleek, and is available at [https://smart-picks.on.fleek.co/](smart-picks.on.fleek.co)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### How it works
 
-### `npm run eject`
+Each chain has its own Pool Factory smart contract, through which users can generate their own pool. All smart contracts maintain strict rules for buy-in price, number of entrants allowed, and one bracket per user.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+![Create Pool flow](https://i.imgur.com/94u6apE.png)
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Our pools will close 24 hours after the tournament ends, and automatically pay out to the winner.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+![Close pool flow](https://i.imgur.com/ibRYfcU.png)

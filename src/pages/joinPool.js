@@ -90,26 +90,25 @@ export default function JoinPool(props) {
   const onSave = async (bracket) => {
     props.updateSnacks('info', 'Join pool is pending');
     try {
-    let _msgValue = await entryFeeToWei(pool.price);
-    let tx = await Moralis.executeFunction({
-      functionName: 'enterPool',
-      params: {
-        _teamName: teamName,
-        _roundOneWinners: bracket.roundOne,
-        _roundTwoWinners: bracket.roundTwo,
-        _roundThreeWinners: bracket.roundThree,
-        _roundFourWinners: bracket.roundFour,
-        _roundFiveWinners: bracket.roundFive,
-        _overallWinner: bracket.winner
-      },
-      msgValue: _msgValue,
-      ...poolOptions
-    });
-    props.updateSnacks('success', 'Successfully joined pool');
-  } catch (err) {
-    props.updateSnacks('error', 'Error joining pool');
-
-  }
+      let _msgValue = await entryFeeToWei(pool.price);
+      let tx = await Moralis.executeFunction({
+        functionName: 'enterPool',
+        params: {
+          _teamName: teamName,
+          _roundOneWinners: bracket.roundOne,
+          _roundTwoWinners: bracket.roundTwo,
+          _roundThreeWinners: bracket.roundThree,
+          _roundFourWinners: bracket.roundFour,
+          _roundFiveWinners: bracket.roundFive,
+          _overallWinner: bracket.winner
+        },
+        msgValue: _msgValue,
+        ...poolOptions
+      });
+      props.updateSnacks('success', 'Successfully joined pool');
+    } catch (err) {
+      props.updateSnacks('error', 'Error joining pool');
+    }
   };
 
   return (
