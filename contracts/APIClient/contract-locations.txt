@@ -1,0 +1,9 @@
+No funds
+Oracle: 0x74321B864C661eD50f25107CA60e40bD5d6f12B4
+
+Fund with Link
+ATestnetConsumer:0xa6B61026cD1F2830f9594b2E82d69e11e5718e02
+
+Fund with ETH
+Chainlink node address: 0x58739168A3A1b651BAc64e10d0161Dc5638329Cc
+
