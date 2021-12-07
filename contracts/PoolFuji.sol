@@ -1,19 +1,15 @@
 //SPDX-License-Identifier: MIT
 pragma solidity >=0.8.0 <0.9.0;
 
-// 10^18 wei = 1 ether
-/*
-Still needed:
-    1. Additional functionality for tiered payouts, currently winner take all
-    2. Chainlink keeper should be calling close pool function, it should be the only one able
-*/
+// 10^18 wei = 1 avax
+
 import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
 
 /**
  * @title Pool
  * @dev Store & retrieveRules value in a variable
  */
-contract Pool {
+contract PoolFuji {
     string public poolName;
     int256 public entryFeeInUSD;
     uint256 public maximumPlayers;
@@ -52,7 +48,7 @@ contract Pool {
         maximumPlayers = _maximumPlayers;
         etherInPot = 0;
         priceFeed = AggregatorV3Interface(
-            0x9326BFA02ADD2366b30bacB125260Af641031331
+            0x5498BB86BC934c8D34FDA08E81D444153d0D06aD
         );
     }
 
@@ -193,14 +189,6 @@ contract Pool {
     }
 
     // Helper Functions
-    // Keeper function - WIP
-    // function checkUpkeep(bytes calldata checkData)
-    //     external
-    //     returns (bool upkeepNeeded, bytes memory performData)
-    // {
-    //     return 1;
-    // }
-
     function getCurrentEntryFeeInWei() public view returns (int256) {
         int256 entryFeeInWei = entryFeeInUSD * 10**18;
         entryFeeInWei = entryFeeInWei / getLatestPrice();

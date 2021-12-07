@@ -19,8 +19,8 @@ async function main() {
   console.log('Deploying contracts with the account:', deployer.address);
   console.log('Account balance:', (await deployer.getBalance()).toString());
 
-  const Pool = await ethers.getContractFactory('Pool');
-  const PoolFactory = await ethers.getContractFactory('PoolFactory');
+  const Pool = await ethers.getContractFactory('PoolMumbai');
+  const PoolFactory = await ethers.getContractFactory('MumbaiPoolFactory');
 
   // const pool = await Pool.deploy(2, 2);
   const poolFactory = await PoolFactory.deploy();
@@ -41,19 +41,19 @@ async function main() {
   // console.log('Facotry articat', poolFactoryArtifact);
 
   fs.writeFileSync(
-    'src/constants/kovan/poolFactoryAddress.js',
+    'src/constants/mumbai/poolFactoryAddress.js',
     `export default '${address}';`,
     (err) => {
       console.log('contract-address, now contains', poolFactory);
       if (err) throw err;
     }
   );
-  fs.writeFileSync('src/constants/PoolABI.json', poolJson, (err) => {
+  fs.writeFileSync('src/constants/mumbai/Pool.json', poolJson, (err) => {
     console.log('poolJson, now contains', poolJson);
     if (err) throw err;
   });
   fs.writeFileSync(
-    'src/constants/PoolFactoryABI.json',
+    'src/constants/mumbai/PoolFactory.json',
     poolFactoryJson,
     (err) => {
       console.log('poolFactoryJson, now contains', poolFactoryJson);
