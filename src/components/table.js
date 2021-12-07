@@ -33,6 +33,7 @@ function createData(type, data) {
     POOL_CONSTANTS.forEach((col) => (formattedData[col.id] = data[col.id]));
     formattedData.entrants += `/${data.maxPlayers}`;
     formattedData.price = '$ ' + formattedData.price / 10 ** 8;
+    formattedData.etherInPot = '$ ' + formattedData.etherInPot;
   } else {
     BRACKET_CONSTANTS.forEach((col) => (formattedData[col.id] = data[col.id]));
     formattedData.id = data.id;
