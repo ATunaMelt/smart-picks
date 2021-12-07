@@ -9,6 +9,8 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import { Link } from 'react-router-dom';
 import { abi as poolABI } from '../constants/PoolABI';
 import { abi as poolFactoryABI } from '../constants/PoolFactoryABI';
+import web3 from 'web3';
+import { lastPrice } from '../common/lastEthPrice.js';
 
 const filterPools = (pools, search) => {
   if (!search || search.length === 0) return pools;
@@ -50,7 +52,7 @@ export default function ViewPools() {
 
   const getPools = async () => {
     if (poolFactoryAddress === '') return;
-
+    let ethPrice = await lastPrice();
     let tx = await Moralis.executeFunction({
       functionName: 'getAllPools',
       abi: poolFactoryABI,
@@ -70,7 +72,11 @@ export default function ViewPools() {
           price: rules._entryFeeInUSD,
           entrants: rules._numberOfPlayers,
           maxPlayers: rules._maximumPlayers,
-          etherInPot: rules._etherInPot,
+          // round to cents
+          etherInPot:
+            Math.round(
+              100 * (web3.utils.fromWei(rules._etherInPot) * ethPrice)
+            ) / 100,
           address: address
         };
       });
