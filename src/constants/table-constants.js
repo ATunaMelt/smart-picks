@@ -21,7 +21,7 @@ export const POOL_CONSTANTS = [
   },
   {
     id: 'etherInPot',
-    label: 'Prize Pool (Wei)',
+    label: 'Prize Pool (USD)',
     numeric: true
   }
 ];
