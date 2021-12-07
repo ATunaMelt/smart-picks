@@ -4,11 +4,18 @@
   position: absolute;
   height: 100%;
   width: 100%;
-  background: url('./blank-bracket.png') no-repeat center center fixed;
-  opacity: 0.1;
+  background: url('./ncaa_ball.jpg') no-repeat center center fixed;
+  opacity: 0.3;
   z-index: -1;
   background-size: 100%;
   left: 0;
+}
+
+.logo {
+  height: 50px;
+  margin: 10px;
+  border-radius: 5px;
+  padding: 5px;
 }
 
 .name {
@@ -19,6 +26,7 @@
     rgba(0, 0, 0, 0.1) 0 51%,
     white 0
   );
+  margin-bottom: 10px;
 
   h2 {
     background: white;
@@ -27,19 +35,30 @@
   }
 }
 
+.header-logo {
+  height: 40px;
+  margin-right: 5px;
+  vertical-align: bottom;
+}
+
 .App {
   padding: 10px 40px;
-  padding-top: 100px;
   display: flex;
-  min-height: 80vh;
 }
 
 .page {
   background: white;
   width: 100%;
+  margin: auto;
+  margin-top: 100px;
   padding: 15px;
   border-radius: 5px;
   border: 1px solid rgba(0, 0, 0, 0.1);
+  max-width: 1200px;
+
+  .refresh-icon {
+    margin: 8px 25px;
+  }
 
   .pull-right {
     float: right;
@@ -60,6 +79,11 @@
   }
   .about p {
     text-align: left;
+  }
+
+  .about a {
+    margin-left: 5px;
+    margin-right: 5px;
   }
   h6 {
     margin-top: 10px;
@@ -150,4 +174,8 @@
     color: white !important;
     font-weight: bold;
   }
+}
+
+.secondary-color {
+  color: $secondary-color;
 }
