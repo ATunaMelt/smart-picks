@@ -14,19 +14,12 @@ import { useMoralis } from 'react-moralis';
 import { abi } from '../constants/PoolABI.json';
 import BracketContainer from '../containers/bracketContainer';
 import Web3 from 'web3';
-import {
-  aggregatorV3InterfaceABI,
-  aggregatorV3InterfaceAddress
-} from '../constants/aggregatorV3Interface';
-
+import { lastPrice } from '../common/lastEthPrice.js';
+import web3 from 'web3';
 export default function JoinPool(props) {
   const { Moralis } = useMoralis();
   const params = useParams();
   const poolOptions = { abi, contractAddress: params.id };
-  const aggregatorV3InterfaceOptions = {
-    abi: aggregatorV3InterfaceABI,
-    contractAddress: aggregatorV3InterfaceAddress
-  };
   const [pool, setPool] = useState({});
   const [selectedBracket, setSelectedBracket] = useState('');
   const [selectedBracketName, setSelectedBracketName] = useState({});
@@ -35,6 +28,7 @@ export default function JoinPool(props) {
   const allBrackets = JSON.parse(window.localStorage.getItem('brackets')) || [];
 
   const retrievePoolInformation = async (address) => {
+    let ethPrice = await lastPrice();
     await Moralis.enableWeb3();
     let rules = await Moralis.executeFunction({
       functionName: 'retrieveRules',
@@ -47,19 +41,13 @@ export default function JoinPool(props) {
       price: rules._entryFeeInUSD,
       entrants: rules._numberOfPlayers,
       maxPlayers: rules._maximumPlayers,
-      etherInPot: rules._etherInPot,
+      etherInPot:
+        Math.round(100 * (web3.utils.fromWei(rules._etherInPot) * ethPrice)) /
+        100,
       address: params.id
     });
   };
 
-  const lastPrice = async () => {
-    await Moralis.enableWeb3();
-    let etherPriceUSD = await Moralis.executeFunction({
-      functionName: 'latestRoundData',
-      ...aggregatorV3InterfaceOptions
-    });
-    return etherPriceUSD[1];
-  };
   // eslint-disable-next-line
   useEffect(async () => {
     if (!pool.title) {
@@ -126,7 +114,7 @@ export default function JoinPool(props) {
           <p>Max number of players: {pool.maxPlayers}</p>
         </div>
         <div className='half'>
-          <p>Ether in pot: {pool.etherInPot}</p>
+          <p>Ether in pot: {'$ ' + pool.etherInPot}</p>
           <p>Number of entrants: {pool.entrants}</p>
         </div>
       </div>
